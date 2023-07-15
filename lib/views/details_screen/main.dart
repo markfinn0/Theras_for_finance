@@ -27,7 +27,7 @@ class DetailsScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'THΞRAS',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ],
           ),
