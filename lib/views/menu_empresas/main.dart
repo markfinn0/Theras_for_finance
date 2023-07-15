@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'footer.dart';
-import 'menu.dart';
+import '../menu_empresas/footer.dart';
+import '../menu_empresas/menu.dart';
 
 class MenuEmpresas extends StatefulWidget {
   const MenuEmpresas({Key? key, required this.title});
@@ -29,16 +29,18 @@ class _MenuEmpresasState extends State<MenuEmpresas> {
           children: <Widget>[
             Text(
               widget.title,
-              style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ],
         ),
       ),
-      body: Container(
-        height: 1200,
-        child: Stack(
-          children: <Widget>[MenuContainer(), Footer()],
-        ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: MenuContainer(),
+          ),
+          Footer(),
+        ],
       ),
     );
   }
