@@ -27,7 +27,7 @@ class DetailsScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'THΞRAS',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -201,6 +201,7 @@ class DetailsScreen extends StatelessWidget {
                                       alignment: Alignment.centerLeft,
                                       flexible: true),
                                   borderedContainer("Períodos",
+                                      fontSize: 12,
                                       padding: const EdgeInsets.fromLTRB(
                                           10, 15, 10, 15),
                                       margin: const EdgeInsets.only(bottom: 7),

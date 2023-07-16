@@ -2,17 +2,64 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../details_screen/main.dart';
 import 'package:flutter/services.dart' show rootBundle;
-//import '../../chart tela.dart';
 
-class MenuContainer extends StatelessWidget {
+class MenuContainer extends StatefulWidget {
+  @override
+  _MenuContainerState createState() => _MenuContainerState();
+}
+
+class _MenuContainerState extends State<MenuContainer> {
+  List<dynamic> view = [];
+  List<dynamic> filteredView = [];
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadCardsData();
+  }
+
+  Future<void> loadCardsData() async {
+    String jsonData = await rootBundle.loadString('asset/cards_main.json');
+    setState(() {
+      view = jsonDecode(jsonData);
+      filteredView = view;
+    });
+  }
+
+  void filterCompanies(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredView = view;
+      } else {
+        filteredView = view.where((company) {
+          String tick = company['tick'].toString().toLowerCase();
+          String sector = company['sector'].toString().toLowerCase();
+          String nome_company = company['nome'].toString().toLowerCase();
+          return tick.contains(query.toLowerCase()) ||
+              sector.contains(query.toLowerCase()) ||
+              nome_company.contains(query.toLowerCase());
+        }).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 400, vertical: 15),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: Flex(
+        direction: Axis.vertical,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.25,
+              vertical: 15,
+            ),
             child: TextField(
+              controller: searchController,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -21,13 +68,15 @@ class MenuContainer extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Color.fromARGB(255, 212, 212, 212),
                   fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.02,
                 ),
               ),
+              onChanged: filterCompanies,
             ),
           ),
           Expanded(
             child: FutureBuilder(
-              future: rootBundle.loadString('asset/data.json'),
+              future: rootBundle.loadString('asset/cards_main.json'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -37,19 +86,23 @@ class MenuContainer extends StatelessWidget {
                   List<dynamic> view = jsonDecode(snapshot.data!);
 
                   return GridView.builder(
-                    itemCount: view.length,
+                    itemCount: filteredView.length,
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 450,
                       childAspectRatio: 2,
                     ),
                     itemBuilder: (context, index) {
-                      var tick = view[index]['tick'];
-                      var sector = view[index]['sector'];
-                      var PM = view[index]['PM'];
-                      var PL = view[index]['PL'];
-                      var Gain = view[index]['Gain'];
-                      var CMP = view[index]['CMP'];
+                      var tick = filteredView[index]['tick'];
+                      var nome_company = filteredView[index]['nome'];
+                      var sector = filteredView[index]['sector'];
+                      var PM = filteredView[index]['PM'];
+                      var PL = filteredView[index]['PL'];
+                      var Gain = filteredView[index]['gain'];
+                      var CMP = filteredView[index]['CMP'];
+                      var color_company = filteredView[index]['color'];
+                      var symbol_status = filteredView[index]['symbol'];
+
                       return InkWell(
                         onTap: () {
                           Navigator.push(
@@ -92,7 +145,7 @@ class MenuContainer extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 68,
+                                  top: 50,
                                   left: 0,
                                   right: 150,
                                   child: Container(
@@ -187,9 +240,23 @@ class MenuContainer extends StatelessWidget {
                                   right: 95,
                                   child: Container(
                                     height: 50,
-                                    child: Icon(
-                                      Icons.trending_up,
-                                    ),
+                                    child: (() {
+                                      if (symbol_status == 'up') {
+                                        return Icon(
+                                          Icons.trending_up,
+                                        );
+                                      } else if (symbol_status == 'down') {
+                                        return Icon(
+                                          Icons.trending_down,
+                                        );
+                                      } else if (symbol_status == 'side') {
+                                        return Icon(
+                                          Icons.trending_flat,
+                                        );
+                                      } else {
+                                        return SizedBox();
+                                      }
+                                    })(),
                                   ),
                                 ),
                                 Positioned(
@@ -200,14 +267,38 @@ class MenuContainer extends StatelessWidget {
                                     height: 30,
                                     child: Align(
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        Gain,
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: (() {
+                                        if (symbol_status == 'up') {
+                                          return Text(
+                                            Gain,
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        } else if (symbol_status == 'down') {
+                                          return Text(
+                                            Gain,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        } else if (symbol_status == 'side') {
+                                          return Text(
+                                            Gain,
+                                            style: TextStyle(
+                                              color: Colors.orange,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox();
+                                        }
+                                      })(),
                                     ),
                                   ),
                                 ),
@@ -234,12 +325,55 @@ class MenuContainer extends StatelessWidget {
                                   bottom: 0,
                                   left: 0,
                                   right: 0,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: Colors.green, // Cor do fundo
-                                    ),
-                                    child: SizedBox(
-                                      height: 15, // Altura do bottom pintado
+                                  child: (() {
+                                    if (color_company == 'green') {
+                                      return DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                        ),
+                                        child: SizedBox(
+                                          height: 15,
+                                        ),
+                                      );
+                                    } else if (color_company == 'orange') {
+                                      return DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                        ),
+                                        child: SizedBox(
+                                          height: 15,
+                                        ),
+                                      );
+                                    } else if (color_company == 'red') {
+                                      return DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                        ),
+                                        child: SizedBox(
+                                          height: 15,
+                                        ),
+                                      );
+                                    } else {
+                                      return SizedBox();
+                                    }
+                                  })(),
+                                ),
+                                Positioned(
+                                  left: 5,
+                                  right: 0,
+                                  bottom: 15,
+                                  child: Container(
+                                    height: 20,
+                                    width: 10,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        nome_company,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -251,7 +385,7 @@ class MenuContainer extends StatelessWidget {
                     },
                   );
                 } else {
-                  return Center(child: Text('No data available.'));
+                  return SizedBox();
                 }
               },
             ),
