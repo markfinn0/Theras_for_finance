@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../menu_empresas/footer.dart';
 import '../menu_empresas/menu.dart';
+import '../details_screen/main.dart';
 
 class MenuEmpresas extends StatefulWidget {
   const MenuEmpresas({Key? key, required this.title});
@@ -34,10 +35,18 @@ class _MenuEmpresasState extends State<MenuEmpresas> {
           ],
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: MenuContainer(),
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: 50), // Adicione o espaçamento desejado aqui
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: MenuContainer(),
+                ),
+              ],
+            ),
           ),
           Footer(),
         ],
