@@ -27,7 +27,7 @@ class DetailsScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'THΞRAS',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -201,7 +201,6 @@ class DetailsScreen extends StatelessWidget {
                                       alignment: Alignment.centerLeft,
                                       flexible: true),
                                   borderedContainer("Períodos",
-                                      fontSize: 12,
                                       padding: const EdgeInsets.fromLTRB(
                                           10, 15, 10, 15),
                                       margin: const EdgeInsets.only(bottom: 7),
@@ -227,11 +226,139 @@ class DetailsScreen extends StatelessWidget {
                                       border: Border.all(color: Colors.black87),
                                     ),
                                     child: SizedBox(
-                                      height: 200,
+                                      height: 300,
                                       // width: 100,
                                       child: GraficoLinear(),
                                     )))
-                          ])
+                          ]),
+                      Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child: Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              Flexible(
+                                  child: Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  borderedContainer("Valor para investir",
+                                      color: Colors.black,
+                                      corTexto: Colors.white,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 5, 20, 5)),
+                                  borderedContainer("Visão: RAROC",
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 5, 20, 5)),
+                                  borderedContainer(
+                                      "150 Mil\n\nDif Taxa Juros: 10 Mil",
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 5, 20, 5),
+                                      textAlignment: TextAlign.center),
+                                ],
+                              )),
+                              Flexible(
+                                  child: Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  borderedContainer("Valor para investir",
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 95, 20, 5)),
+                                  borderedContainer("Melhor investir em ações",
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 5, 20, 5),
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                      corTexto: Colors.white),
+                                ],
+                              )),
+                              Flexible(
+                                  child: Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  borderedContainer("",
+                                      element: const Flex(
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              "14%",
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Flexible(
+                                              flex: 3,
+                                              child: Text(
+                                                "Taxa de Juros",
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              )),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 10, 5, 10)),
+                                  borderedContainer("",
+                                      element: const Flex(
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              "3%",
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Flexible(
+                                            flex: 3,
+                                            child: Text(
+                                              "Risco do Investimento",
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 10, 5, 10)),
+                                  borderedContainer("",
+                                      element: const Flex(
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              "20%",
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Flexible(
+                                            flex: 3,
+                                            child: Text(
+                                              "Retorno do Investimento",
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 10, 5, 10)),
+                                ],
+                              )),
+                            ],
+                          ))
                     ],
                   ))
             ])));
@@ -241,7 +368,7 @@ class DetailsScreen extends StatelessWidget {
 class PriceCard extends StatelessWidget {
   final String label;
   final String price;
-  PriceCard(this.label, this.price, {super.key});
+  const PriceCard(this.label, this.price, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -257,21 +384,23 @@ class PriceCard extends StatelessWidget {
   }
 }
 
-//GraficoLinear()
-
 borderedContainer(String text,
     {EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets margin = const EdgeInsets.all(0),
     double fontSize = 20,
     Alignment alignment = Alignment.center,
+    TextAlign? textAlignment,
     Color color = Colors.transparent,
     Color corTexto = Colors.black,
-    bool flexible = false}) {
+    bool flexible = false,
+    Widget? element}) {
   Wrap wrap = Wrap(alignment: WrapAlignment.spaceBetween, children: [
     Align(
         alignment: alignment,
-        child:
-            Text(text, style: TextStyle(fontSize: fontSize, color: corTexto)))
+        child: element ??
+            Text(text,
+                textAlign: textAlignment ?? TextAlign.start,
+                style: TextStyle(fontSize: fontSize, color: corTexto)))
   ]);
   BoxDecoration decoration = BoxDecoration(
     border: Border.all(color: Colors.black87),
@@ -286,12 +415,6 @@ borderedContainer(String text,
       displayMedium: TextStyle(color: corTexto, fontSize: fontSize),
       displayLarge: TextStyle(color: corTexto, fontSize: fontSize),
     )),
-    // child: flexible
-    //     ? Flexible(
-    //         flex: 1,
-    //         child: containerGeral,
-    //       )
-    //     : containerGeral
     child: containerGeral,
   );
 }
