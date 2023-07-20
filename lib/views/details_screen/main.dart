@@ -1,420 +1,472 @@
 import 'package:flutter/material.dart';
 import 'grafico_linear.dart';
 import '../menu_empresas/footer.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 
 class DetailsScreen extends StatelessWidget {
   final String cardIndex;
+  final String color_company;
+  final String PM;
+  final String nome_company;
+  final String sector;
+
   final double breakpoint = 800;
   final int paneProportion = 50;
 
-  DetailsScreen(this.cardIndex);
+  DetailsScreen(this.cardIndex, this.color_company, this.PM, this.nome_company,
+      this.sector);
+
+  Widget _getStatusContainer(String colorCompany) {
+    Color backgroundColor;
+    String status;
+    if (colorCompany == 'green') {
+      backgroundColor = Colors.green;
+      status = 'Desempenho Bom';
+    } else if (colorCompany == 'orange') {
+      backgroundColor = Colors.orange;
+      status = 'Desempenho Médio';
+    } else if (colorCompany == 'red') {
+      backgroundColor = Colors.red;
+      status = 'Desempenho Ruim';
+    } else {
+      return SizedBox();
+    }
+
+    return borderedContainer(
+      status,
+      color: backgroundColor,
+      corTexto: Colors.white,
+      padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.report),
-              onPressed: () {},
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.report),
+            onPressed: () {},
+          ),
+        ],
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'THΞRAS',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ],
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'THΞRAS',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
         ),
-        body: Container(
-            margin: const EdgeInsets.only(top: 30),
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: Flex(direction: Axis.horizontal, children: [
-              Flexible(
-                  flex: 6,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 30),
-                        child: Row(
-                          children: [
-                            Flex(
-                              direction: Axis.vertical,
-                              children: [
-                                const Text("Último Resultado: Mar-2023"),
-                                borderedContainer(cardIndex,
-                                    fontSize: 36,
-                                    padding: const EdgeInsets.fromLTRB(
-                                        40, 20, 40, 20))
-                              ],
-                            ),
-                            const Spacer(),
-                            Flex(
-                              direction: Axis.vertical,
-                              children: [
-                                const Text(
-                                  "Preço",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Row(
-                                  children: [
-                                    PriceCard("Lower", "15,50"),
-                                    PriceCard("Médio", "20,01"),
-                                    PriceCard("High", "26,79"),
-                                    borderedContainer("Bom",
-                                        color: Colors.green,
-                                        corTexto: Colors.white,
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                        margin: EdgeInsets.only(left: 30)),
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      borderedContainer("Nome: Azul Linhas Aéreas",
-                          padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-                          alignment: Alignment.centerLeft),
-                      borderedContainer("Setor: Aviação",
-                          padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-                          alignment: Alignment.centerLeft),
-                      borderedContainer("Indicadores Relativos",
-                          padding: const EdgeInsets.fromLTRB(10, 15, 10, 15)),
-                      Flex(
-                        direction: Axis.horizontal,
-                        children: [
-                          Flexible(
-                              flex: 4,
-                              child: Flex(
+      ),
+      body: Container(
+        margin: const EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+        child: FutureBuilder<String>(
+          future: rootBundle.loadString(
+              'asset/Empresas_data/' + cardIndex + '_fundamentalist.json'),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              var view = jsonDecode(snapshot.data!);
+              String DY = view[0]['DY'];
+              String UBL = view[0]['UBL'];
+              String MAX = view[0]['MAX'];
+              String MIN = view[0]['MIN'];
+              String PL = view[0]['PL'];
+              String ROE = view[0]['ROE'];
+              String CR5 = view[0]['CR5'];
+              String LPA = view[0]['LPA'];
+              String LucroLiqu = view[0]['LucroLiqu'];
+              String Valormercado = view[0]['Valormercado'];
+
+              return Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Flexible(
+                    flex: 6,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            children: [
+                              Flex(
                                 direction: Axis.vertical,
                                 children: [
-                                  borderedContainer("Últimos Resultados",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15)),
-                                  borderedContainer("P/L: 5.10",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("DY: 6%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("ROE: 5%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("Marg. Liqui: -5%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("EBITDA: 6%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("Ind. Dívida: 2%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                ],
-                              )),
-                          Flexible(
-                              flex: 4,
-                              child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  borderedContainer("Previsão próximo ano",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15)),
-                                  borderedContainer("P/L: 5.10",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("DY: 6%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("ROE: 5%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("Marg. Liqui: -5%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("EBITDA: 6%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                  borderedContainer("Ind. Dívida: 2%",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5)),
-                                ],
-                              ))
-                        ],
-                      )
-                    ],
-                  )),
-              const Spacer(
-                flex: 1,
-              ),
-              Flexible(
-                  flex: 6,
-                  child: Column(
-                    children: [
-                      Row(),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              // margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                              flex: 20,
-                              child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  borderedContainer("MultiChart",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15),
-                                      margin: const EdgeInsets.only(bottom: 7),
-                                      alignment: Alignment.centerLeft,
-                                      color: Colors.black,
+                                  Text(
+                                    "Último Resultado: " + UBL,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  borderedContainer(cardIndex,
+                                      color: Color.fromRGBO(8, 32, 50, 50),
+                                      fontSize: 30,
                                       corTexto: Colors.white,
-                                      flexible: true),
-                                  borderedContainer("Visão",
                                       padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15),
-                                      margin: const EdgeInsets.only(bottom: 7),
+                                          30, 20, 30, 20))
+                                ],
+                              ),
+                              const Spacer(),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  width:
+                                      90, // Defina o tamanho desejado da largura da imagem
+                                  height:
+                                      80, // Defina o tamanho desejado da altura da imagem
+                                  child: Image.asset(
+                                    'image/company_imagens/' +
+                                        cardIndex +
+                                        '.png',
+                                    fit: BoxFit
+                                        .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  Row(
+                                    children: [
+                                      PriceCard(
+                                        "Min",
+                                        MIN,
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      PriceCard(
+                                        "Médio",
+                                        PM,
+                                        backgroundColor: Colors.orange,
+                                      ),
+                                      PriceCard(
+                                        "Max",
+                                        MAX,
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Flex(direction: Axis.horizontal, children: [
+                          Flexible(
+                              flex: 1,
+                              child: Flex(direction: Axis.vertical, children: [
+                                borderedContainer("Nome:",
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 15),
+                                    corTexto: Colors.white,
+                                    alignment: Alignment.centerLeft),
+                                borderedContainer("Setor:",
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 15),
+                                    corTexto: Colors.white,
+                                    alignment: Alignment.centerLeft),
+                              ])),
+                          Flexible(
+                              flex: 4,
+                              child: Flex(direction: Axis.vertical, children: [
+                                borderedContainer(nome_company,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 15),
+                                    color: Color.fromRGBO(245, 255, 250, 1.0),
+                                    alignment: Alignment.centerLeft),
+                                borderedContainer(sector,
+                                    color: Color.fromRGBO(245, 255, 250, 1.0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 15),
+                                    alignment: Alignment.centerLeft),
+                              ]))
+                        ]),
+                        borderedContainer(
+                          "Indicadores Relativos",
+                          color: Color.fromRGBO(8, 32, 50, 50),
+                          padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+                          corTexto: Colors.white,
+                        ),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "Valor de Mercado:",
                                       alignment: Alignment.centerLeft,
-                                      flexible: true),
-                                  borderedContainer("Indicadores",
                                       padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15),
-                                      margin: const EdgeInsets.only(bottom: 7),
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "Lucro Líquido:",
                                       alignment: Alignment.centerLeft,
-                                      flexible: true),
-                                  borderedContainer("Períodos",
                                       padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15),
-                                      margin: const EdgeInsets.only(bottom: 7),
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "Cres.Rec 5 anos:",
                                       alignment: Alignment.centerLeft,
-                                      flexible: true),
-                                  borderedContainer("Comparador",
                                       padding: const EdgeInsets.fromLTRB(
-                                          10, 15, 10, 15),
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "P/L:",
                                       alignment: Alignment.centerLeft,
-                                      flexible: true),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "Dividend Yield:",
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "ROE:",
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
+                                  Container(
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    child: borderedContainer(
+                                      "Lucro por Ação:",
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 5, 10, 5),
+                                      corTexto: Colors.white,
+                                    ),
+                                  ), // Sem borda
                                 ],
                               ),
                             ),
-                            const Spacer(
-                              flex: 2,
-                            ),
+                            Flexible(
+                                flex: 4,
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  children: [
+                                    borderedContainer(Valormercado,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(LucroLiqu,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(CR5,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(PL,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(DY,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(ROE,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                    borderedContainer(LPA,
+                                        color:
+                                            Color.fromRGBO(245, 255, 250, 1.0),
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 10, 5)),
+                                  ],
+                                ))
+                          ],
+                        ),
+                        Container(
+                          child: _getStatusContainer(color_company),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 8,
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Spacer(flex: 1),
                             Expanded(
-                                flex: 60,
-                                child: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    padding: const EdgeInsets.all(15),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black87),
-                                    ),
-                                    child: SizedBox(
-                                      height: 300,
-                                      // width: 100,
-                                      child: GraficoLinear(),
-                                    )))
-                          ]),
-                      Container(
-                          margin: EdgeInsets.only(top: 30),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Flexible(
-                                  child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  borderedContainer("Valor para investir",
-                                      color: Colors.black,
-                                      corTexto: Colors.white,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 5, 20, 5)),
-                                  borderedContainer("Visão: RAROC",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 5, 20, 5)),
-                                  borderedContainer(
-                                      "150 Mil\n\nDif Taxa Juros: 10 Mil",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 5, 20, 5),
-                                      textAlignment: TextAlign.center),
-                                ],
-                              )),
-                              Flexible(
-                                  child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  borderedContainer("Valor para investir",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 95, 20, 5)),
-                                  borderedContainer("Melhor investir em ações",
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 5, 20, 5),
-                                      fontSize: 12,
-                                      color: Colors.green,
-                                      corTexto: Colors.white),
-                                ],
-                              )),
-                              Flexible(
-                                  child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  borderedContainer("",
-                                      element: const Flex(
-                                        direction: Axis.horizontal,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              "14%",
-                                              style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Flexible(
-                                              flex: 3,
-                                              child: Text(
-                                                "Taxa de Juros",
-                                                textAlign: TextAlign.end,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              )),
-                                        ],
-                                      ),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 10, 5, 10)),
-                                  borderedContainer("",
-                                      element: const Flex(
-                                        direction: Axis.horizontal,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              "3%",
-                                              style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Flexible(
-                                            flex: 3,
-                                            child: Text(
-                                              "Risco do Investimento",
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 10, 5, 10)),
-                                  borderedContainer("",
-                                      element: const Flex(
-                                        direction: Axis.horizontal,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              "20%",
-                                              style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Flexible(
-                                            flex: 3,
-                                            child: Text(
-                                              "Retorno do Investimento",
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 10, 5, 10)),
-                                ],
-                              )),
-                            ],
-                          ))
-                    ],
-                  ))
-            ])));
+                              flex: 60,
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black87),
+                                ),
+                                child: SizedBox(
+                                  height: 350,
+                                  // width: 100,
+                                  child: GraficoLinear(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Center(child: Text('Nenhum dado encontrado.'));
+            }
+          },
+        ),
+      ),
+    );
   }
 }
 
 class PriceCard extends StatelessWidget {
   final String label;
   final String price;
-  const PriceCard(this.label, this.price, {super.key});
+  final Color backgroundColor;
+  PriceCard(this.label, this.price, {Key? key, required this.backgroundColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        key: super.key,
-        child: Column(children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 20),
-          ),
-          Text(price, style: const TextStyle(fontSize: 20)),
-        ]));
+    return Container(
+      width: 80, // Aumente a largura do Card conforme necessário
+      height: 60, // Aumente a altura do Card conforme necessário
+      child: Card(
+        key: key,
+        color: backgroundColor, // Definir a cor de fundo do Card
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      price,
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 borderedContainer(String text,
     {EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets margin = const EdgeInsets.all(0),
-    double fontSize = 20,
+    double fontSize = 15,
     Alignment alignment = Alignment.center,
-    TextAlign? textAlignment,
     Color color = Colors.transparent,
     Color corTexto = Colors.black,
-    bool flexible = false,
-    Widget? element}) {
-  Wrap wrap = Wrap(alignment: WrapAlignment.spaceBetween, children: [
-    Align(
-        alignment: alignment,
-        child: element ??
-            Text(text,
-                textAlign: textAlignment ?? TextAlign.start,
-                style: TextStyle(fontSize: fontSize, color: corTexto)))
-  ]);
-  BoxDecoration decoration = BoxDecoration(
-    border: Border.all(color: Colors.black87),
-    color: color,
-  );
-  Container containerGeral = Container(
-      padding: padding, margin: margin, decoration: decoration, child: wrap);
-  return Theme(
-    data: ThemeData(
-        textTheme: TextTheme(
-      displaySmall: TextStyle(color: corTexto, fontSize: fontSize),
-      displayMedium: TextStyle(color: corTexto, fontSize: fontSize),
-      displayLarge: TextStyle(color: corTexto, fontSize: fontSize),
-    )),
-    child: containerGeral,
+    bool flexible = false}) {
+  return Container(
+    padding: padding,
+    margin: margin,
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.white),
+      color: color,
+    ),
+    child: Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      children: [
+        Align(
+          alignment: alignment,
+          child: Text(
+            text,
+            style: TextStyle(fontSize: fontSize, color: corTexto),
+          ),
+        ),
+      ],
+    ),
   );
 }
