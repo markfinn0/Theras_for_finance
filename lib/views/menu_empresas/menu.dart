@@ -108,7 +108,8 @@ class _MenuContainerState extends State<MenuContainer> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailsScreen(tick),
+                              builder: (context) => DetailsScreen(tick,
+                                  color_company, PM, nome_company, sector),
                             ),
                           );
                         },
@@ -235,11 +236,11 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 80,
+                                  top: 45,
                                   left: 142,
                                   right: 95,
                                   child: Container(
-                                    height: 50,
+                                    height: 60,
                                     child: (() {
                                       if (symbol_status == 'up') {
                                         return Icon(
@@ -260,7 +261,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 50,
+                                  top: 40,
                                   left: 142,
                                   right: 95,
                                   child: Container(
@@ -273,7 +274,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                             Gain,
                                             style: TextStyle(
                                               color: Colors.green,
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           );
@@ -282,7 +283,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                             Gain,
                                             style: TextStyle(
                                               color: Colors.red,
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           );
@@ -291,7 +292,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                             Gain,
                                             style: TextStyle(
                                               color: Colors.orange,
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           );
@@ -303,19 +304,18 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 75,
-                                  left: 142,
-                                  right: 95,
+                                  top: 30,
+                                  left: 165,
+                                  right: 100,
                                   child: Container(
-                                    height: 30,
+                                    height: 20,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       child: Text(
-                                        CMP,
+                                        "Prev. 14W",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ),
