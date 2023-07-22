@@ -44,334 +44,398 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.report),
-            onPressed: () {},
-          ),
-        ],
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              'T H Ξ R A S',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.report),
+              onPressed: () {},
             ),
           ],
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'T H Ξ R A S',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Container(
-        margin: const EdgeInsets.only(top: 30),
-        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-        child: FutureBuilder<String>(
-          future: rootBundle.loadString(
-              'asset/Empresas_data/' + cardIndex + '_fundamentalist.json'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              var view = jsonDecode(snapshot.data!);
-              String DY = view[0]['DY'];
-              String UBL = view[0]['UBL'];
-              String MAX = view[0]['MAX'];
-              String MIN = view[0]['MIN'];
-              String PL = view[0]['PL'];
-              String ROE = view[0]['ROE'];
-              String CR5 = view[0]['CR5'];
-              String LPA = view[0]['LPA'];
-              String LucroLiqu = view[0]['LucroLiqu'];
-              String Valormercado = view[0]['Valormercado'];
+        body: SingleChildScrollView(
+            child: Stack(children: [
+          Container(
+            margin: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            child: FutureBuilder<String>(
+              future: rootBundle.loadString(
+                  'asset/Empresas_data/' + cardIndex + '_fundamentalist.json'),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  var view = jsonDecode(snapshot.data!);
+                  String DY = view[0]['DY'];
+                  String UBL = view[0]['UBL'];
+                  String MAX = view[0]['MAX'];
+                  String MIN = view[0]['MIN'];
+                  String PL = view[0]['PL'];
+                  String ROE = view[0]['ROE'];
+                  String CR5 = view[0]['CR5'];
+                  String LPA = view[0]['LPA'];
+                  String LucroLiqu = view[0]['LucroLiqu'];
+                  String Valormercado = view[0]['Valormercado'];
 
-              return Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Flexible(
-                    flex: 6,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 15),
-                          child: Row(
-                            children: [
-                              Flex(
-                                direction: Axis.vertical,
+                  return LayoutBuilder(
+                    builder: (BuildContext context,
+                        BoxConstraints viewportConstraints) {
+                      return SingleChildScrollView(
+                          child: Align(
+                        alignment: Alignment.center,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                              minHeight: 600, maxWidth: 1080),
+                          child: Column(children: [
+                            Container(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              child: Column(
                                 children: [
-                                  Text(
-                                    "Último Resultado: " + UBL,
-                                    style: TextStyle(fontSize: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    child: Row(
+                                      children: [
+                                        Flex(
+                                          direction: Axis.vertical,
+                                          children: [
+                                            Text(
+                                              "Último Resultado: " + UBL,
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                            borderedContainer(cardIndex,
+                                                color: Color.fromRGBO(
+                                                    8, 32, 50, 50),
+                                                fontSize: 30,
+                                                corTexto: Colors.white,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        30, 20, 30, 20))
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Container(
+                                            width:
+                                                90, // Defina o tamanho desejado da largura da imagem
+                                            height:
+                                                80, // Defina o tamanho desejado da altura da imagem
+                                            child: Image.asset(
+                                              'image/company_imagens/' +
+                                                  cardIndex +
+                                                  '.png',
+                                              fit: BoxFit
+                                                  .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
+                                            ),
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Flex(
+                                          direction: Axis.vertical,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                PriceCard(
+                                                  "Min",
+                                                  MIN,
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                                PriceCard(
+                                                  "Médio",
+                                                  PM,
+                                                  backgroundColor:
+                                                      Colors.orange,
+                                                ),
+                                                PriceCard(
+                                                  "Max",
+                                                  MAX,
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  borderedContainer(cardIndex,
-                                      color: Color.fromRGBO(8, 32, 50, 50),
-                                      fontSize: 30,
-                                      corTexto: Colors.white,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          30, 20, 30, 20))
+                                  Flex(direction: Axis.horizontal, children: [
+                                    Flexible(
+                                        flex: 1,
+                                        child: Flex(
+                                            direction: Axis.vertical,
+                                            children: [
+                                              borderedContainer("Nome:",
+                                                  color: Color.fromRGBO(
+                                                      8, 32, 50, 50),
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 15, 10, 15),
+                                                  corTexto: Colors.white,
+                                                  alignment:
+                                                      Alignment.centerLeft),
+                                              borderedContainer("Setor:",
+                                                  color: Color.fromRGBO(
+                                                      8, 32, 50, 50),
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 15, 10, 15),
+                                                  corTexto: Colors.white,
+                                                  alignment:
+                                                      Alignment.centerLeft),
+                                            ])),
+                                    Flexible(
+                                        flex: 4,
+                                        child: Flex(
+                                            direction: Axis.vertical,
+                                            children: [
+                                              borderedContainer(nome_company,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 15, 10, 15),
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft),
+                                              borderedContainer(sector,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 15, 10, 15),
+                                                  alignment:
+                                                      Alignment.centerLeft),
+                                            ]))
+                                  ]),
+                                  borderedContainer(
+                                    "Indicadores Relativos",
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 15),
+                                    corTexto: Colors.white,
+                                  ),
+                                  Flex(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      Flexible(
+                                        flex: 2,
+                                        child: Flex(
+                                          direction: Axis.vertical,
+                                          children: [
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "Valor de Mercado:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "Lucro Líquido:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "Cres.Rec 5 anos:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "P/L:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "Dividend Yield:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "ROE:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                            Container(
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+                                              child: borderedContainer(
+                                                "Lucro por Ação:",
+                                                alignment: Alignment.centerLeft,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                corTexto: Colors.white,
+                                              ),
+                                            ), // Sem borda
+                                          ],
+                                        ),
+                                      ),
+                                      Flexible(
+                                          flex: 4,
+                                          child: Flex(
+                                            direction: Axis.vertical,
+                                            children: [
+                                              borderedContainer(Valormercado,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(LucroLiqu,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(CR5,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(PL,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(DY,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(ROE,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                              borderedContainer(LPA,
+                                                  color: Color.fromRGBO(
+                                                      245, 255, 250, 1.0),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          15, 5, 10, 5)),
+                                            ],
+                                          ))
+                                    ],
+                                  ),
+                                  Container(
+                                    child: _getStatusContainer(color_company),
+                                  ),
                                 ],
                               ),
-                              const Spacer(),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  width:
-                                      90, // Defina o tamanho desejado da largura da imagem
-                                  height:
-                                      80, // Defina o tamanho desejado da altura da imagem
-                                  child: Image.asset(
-                                    'image/company_imagens/' +
-                                        cardIndex +
-                                        '.png',
-                                    fit: BoxFit
-                                        .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              Flex(
-                                direction: Axis.vertical,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(top: 80),
+                              child: Column(
                                 children: [
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      PriceCard(
-                                        "Min",
-                                        MIN,
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      PriceCard(
-                                        "Médio",
-                                        PM,
-                                        backgroundColor: Colors.orange,
-                                      ),
-                                      PriceCard(
-                                        "Max",
-                                        MAX,
-                                        backgroundColor: Colors.green,
+                                      const Spacer(flex: 1),
+                                      Expanded(
+                                        flex: 60,
+                                        child: Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 10),
+                                          padding: const EdgeInsets.all(15),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black87),
+                                          ),
+                                          child: SizedBox(
+                                            height: 350,
+                                            // width: 100,
+                                            child: GraficoLinear(),
+                                            
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        Flex(direction: Axis.horizontal, children: [
-                          Flexible(
-                              flex: 1,
-                              child: Flex(direction: Axis.vertical, children: [
-                                borderedContainer("Nome:",
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 15, 10, 15),
-                                    corTexto: Colors.white,
-                                    alignment: Alignment.centerLeft),
-                                borderedContainer("Setor:",
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 15, 10, 15),
-                                    corTexto: Colors.white,
-                                    alignment: Alignment.centerLeft),
-                              ])),
-                          Flexible(
-                              flex: 4,
-                              child: Flex(direction: Axis.vertical, children: [
-                                borderedContainer(nome_company,
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 15, 10, 15),
-                                    color: Color.fromRGBO(245, 255, 250, 1.0),
-                                    alignment: Alignment.centerLeft),
-                                borderedContainer(sector,
-                                    color: Color.fromRGBO(245, 255, 250, 1.0),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 15, 10, 15),
-                                    alignment: Alignment.centerLeft),
-                              ]))
-                        ]),
-                        borderedContainer(
-                          "Indicadores Relativos",
-                          color: Color.fromRGBO(8, 32, 50, 50),
-                          padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-                          corTexto: Colors.white,
-                        ),
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            Flexible(
-                              flex: 2,
-                              child: Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "Valor de Mercado:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "Lucro Líquido:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "Cres.Rec 5 anos:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "P/L:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "Dividend Yield:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "ROE:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                  Container(
-                                    color: Color.fromRGBO(8, 32, 50, 50),
-                                    child: borderedContainer(
-                                      "Lucro por Ação:",
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      corTexto: Colors.white,
-                                    ),
-                                  ), // Sem borda
-                                ],
-                              ),
                             ),
-                            Flexible(
-                                flex: 4,
-                                child: Flex(
-                                  direction: Axis.vertical,
-                                  children: [
-                                    borderedContainer(Valormercado,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(LucroLiqu,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(CR5,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(PL,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(DY,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(ROE,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                    borderedContainer(LPA,
-                                        color:
-                                            Color.fromRGBO(245, 255, 250, 1.0),
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 5, 10, 5)),
-                                  ],
-                                ))
-                          ],
+                          ]),
                         ),
-                        Container(
-                          child: _getStatusContainer(color_company),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    flex: 8,
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Spacer(flex: 1),
-                            Expanded(
-                              flex: 60,
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 10),
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black87),
-                                ),
-                                child: SizedBox(
-                                  height: 350,
-                                  // width: 100,
-                                  child: GraficoLinear(cardIndex),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return Center(child: Text('Nenhum dado encontrado.'));
-            }
-          },
-        ),
-      ),
-    );
+                      ));
+                    },
+                  );
+                } else {
+                  return Center(child: Text('Nenhum dado encontrado.'));
+                }
+              },
+            ),
+          ),
+        ])));
   }
 }
 

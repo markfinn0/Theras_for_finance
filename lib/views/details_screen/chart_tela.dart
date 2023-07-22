@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'dart:async';
 
 void main() {
   runApp(const MyApp());
@@ -36,13 +31,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<FlSpot> chartData = [
-    FlSpot(0, 2),
-    FlSpot(1, 5),
-    FlSpot(2, 4),
-    FlSpot(3, 7),
-    FlSpot(4, 6),
-    FlSpot(5, 10),
-    FlSpot(6, 9),
+    const FlSpot(0, 2),
+    const FlSpot(1, 5),
+    const FlSpot(2, 4),
+    const FlSpot(3, 7),
+    const FlSpot(4, 6),
+    const FlSpot(5, 10),
+    const FlSpot(6, 9),
   ];
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.report),
+            icon: const Icon(Icons.report),
             onPressed: () {},
           ),
         ],
@@ -62,16 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               widget.title,
-              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             ),
           ],
         ),
       ),
-      body: Container(
+      body: SizedBox(
         height: 1200,
         child: Stack(
           children: <Widget>[
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 70,
               left: 30,
@@ -85,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 550,
               left: 30,
@@ -104,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 360,
               bottom: 300,
               left: 340,
@@ -124,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )),
             ),
-            Positioned(
+            const Positioned(
               top: 360,
               bottom: 300,
               left: 30,
@@ -144,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )),
             ),
-            Positioned(
+            const Positioned(
               top: 305,
               bottom: 350,
               left: 30,
@@ -164,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )),
             ),
-            Positioned(
+            const Positioned(
               top: 230,
               bottom: 405,
               left: 30,
@@ -183,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 160,
               bottom: 480,
               left: 30,
@@ -202,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 550,
               left: 540,
@@ -221,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 550,
               left: 440,
@@ -240,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 640,
               left: 440,
@@ -259,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 550,
               left: 340,
@@ -278,7 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 640,
               left: 340,
@@ -297,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 550,
               left: 240,
@@ -316,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 640,
               left: 240,
@@ -335,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 15,
               bottom: 660,
               left: 30,
@@ -354,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 400,
               bottom: 70,
               left: 700,
@@ -382,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         LineChartBarData(
                           spots: chartData,
                           isCurved: true,
-                          dotData: FlDotData(
+                          dotData: const FlDotData(
                             show: false,
                           ),
                           color: Colors.blue,
@@ -392,8 +387,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderData: FlBorderData(
                           border: const Border(
                               bottom: BorderSide(), left: BorderSide())),
-                      gridData: FlGridData(show: false),
-                      titlesData: FlTitlesData(
+                      gridData: const FlGridData(show: false),
+                      titlesData: const FlTitlesData(
                         leftTitles: AxisTitles(
                             axisNameSize: 5,
                             sideTitles:
@@ -410,7 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ))),
-            Positioned(
+            const Positioned(
               top: 120,
               bottom: 320,
               left: 700,
@@ -431,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage> {
               right: 30,
               child: Image.asset('image/Azul.png', width: 300, height: 200),
             ),
-            Positioned(
+            const Positioned(
               top: 50,
               bottom: 600,
               left: 700,
@@ -456,8 +451,8 @@ class _MyHomePageState extends State<MyHomePage> {
               right: 0,
               child: Container(
                 height: 50,
-                color: Color.fromRGBO(8, 32, 50, 50),
-                child: Row(
+                color: const Color.fromRGBO(8, 32, 50, 50),
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -481,29 +476,29 @@ class _MyHomePageState extends State<MyHomePage> {
 class DetailsScreen extends StatelessWidget {
   final String cardIndex;
 
-  DetailsScreen(this.cardIndex);
+  DetailsScreen(this.cardIndex, {super.key});
   List<FlSpot> chartData = [
-    FlSpot(0, 2),
-    FlSpot(1, 5),
-    FlSpot(2, 4),
-    FlSpot(3, 7),
-    FlSpot(4, 6),
-    FlSpot(5, 10),
-    FlSpot(6, 9),
+    const FlSpot(0, 2),
+    const FlSpot(1, 5),
+    const FlSpot(2, 4),
+    const FlSpot(3, 7),
+    const FlSpot(4, 6),
+    const FlSpot(5, 10),
+    const FlSpot(6, 9),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(8, 32, 50, 50),
+          backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
           centerTitle: true,
           actions: [
             IconButton(
-              icon: Icon(Icons.report),
+              icon: const Icon(Icons.report),
               onPressed: () {},
             ),
           ],
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -514,8 +509,7 @@ class DetailsScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: Container(
-            child: Stack(
+        body: const Stack(
           children: [
             Positioned(
               bottom: 0,
@@ -531,6 +525,6 @@ class DetailsScreen extends StatelessWidget {
               ),
             ),
           ],
-        )));
+        ));
   }
 }
