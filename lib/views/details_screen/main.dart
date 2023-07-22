@@ -58,7 +58,7 @@ class DetailsScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              'THΞRAS',
+              'T H Ξ R A S',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ],
@@ -354,7 +354,7 @@ class DetailsScreen extends StatelessWidget {
                                 child: SizedBox(
                                   height: 350,
                                   // width: 100,
-                                  child: GraficoLinear(),
+                                  child: GraficoLinear(cardIndex),
                                 ),
                               ),
                             ),
