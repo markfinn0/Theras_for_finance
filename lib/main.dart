@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Theras for Finance',
       home: FutureBuilder(builder: (context, snapshot) {
-        return const MenuEmpresas(title: 'THΞRAS');
+        return const MenuEmpresas(title: 'T H Ξ R A S');
       }),
     );
   }
