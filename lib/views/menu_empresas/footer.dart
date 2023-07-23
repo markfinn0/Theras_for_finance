@@ -18,7 +18,7 @@ class Footer extends StatelessWidget {
             Text(
               '© THΞRAS for Finance - APS 2023 - Todos os direitos reservados',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: Colors.white,
               ),
             ),

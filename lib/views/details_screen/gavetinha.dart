@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ListaGavetinha {
   List<String> get tipoDeGraficoLista => <String>['Price', 'Finanças'];
+
   List<String> get indicadoresPriceLista =>
       <String>['Média Móvel 14', 'Média Móvel 21', 'RSI', 'Bollinger Bands'];
   List<String> get acoesPriceLista => <String>['PETR3', 'PETR4'];
