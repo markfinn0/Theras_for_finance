@@ -7,6 +7,9 @@ List<FlSpot> chartData1 = [];
 List<FlSpot> chartData_media_movel = [];
 List<FlSpot> chartData_sup_boll= [];
 List<FlSpot> chartData_inf_boll= [];
+late String jsonData;
+late String jsonData1;
+late String jsonData2;
 
 
 class GraficoLinear extends StatefulWidget {
@@ -19,50 +22,76 @@ class GraficoLinear extends StatefulWidget {
 }
 
 class _GraficoLinearState extends State<GraficoLinear> {
-  List<dynamic> view = [];
-  List<dynamic> view2 = [];
+  
+  //List<dynamic> view = [];
+  //List<dynamic> view2 = [];
   
   var inicio;
+  Map<String, dynamic> ?view;
+  late Map<String, dynamic> view2;
+  late Map<String, dynamic> view3;
   double ?quant;
   double ?menorValor;
   double ?maiorValor;
   List <dynamic> predicaoValor = [];
   List<FlSpot> chartData = [];
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 9,
+    );
+    Widget text;
+    String texto = view?['Data'][value.toString()];
+    text = Text(texto, style: style);
 
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      angle: -90,
+
+      space: 10,
+      child: text,
+      
+    );
+  }
   Future<List<FlSpot>> testandoFunc() async {
     
-    String jsonData = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes_teste.json');
-    String jsonData1 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
-    String jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes_teste2.json');
+    jsonData = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+    jsonData1 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
+    //String jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
+    jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_bandas_boll.json');
+    print(widget.cardIndex);
     view = jsonDecode(jsonData);
     view2 = jsonDecode(jsonData1);
-    Map<String, dynamic> view3 = json.decode(jsonData2);
-    print(view3.keys);
-    quant = view[0]['Close'].length;//determinando limites no eixo x do grafico
+    view3 = json.decode(jsonData2);
+    //Map<String, dynamic> view4 = json.decode(jsonData3);
+
+
+    //print(view);
+    quant = view?['Close'].length;//determinando limites no eixo x do grafico
     
     //setando o array com os valores de cotação no grafico
-    for(int a = 0; a < view[0]['Close'].length; a++){
-      predicaoValor.insert(a,view[0]['Close'][a.toString()]);
-      chartData.insert(a, FlSpot(a.toDouble(), view[0]['Close'][a.toString()]));
+    for(int a = 0; a < view?['Close'].length; a++){
+      predicaoValor.insert(a,view?['Close'][a.toString()]);
+      chartData.insert(a, FlSpot(a.toDouble(), view?['Close'][a.toString()]));
       
     }
     
     // localizando onde começam as predicoes
-    view[0]['Data'].forEach((chave, valor) {
-    if (valor == view2[0]['data'][("0").toString()]) {
+  /*  view['Data'].forEach((chave, valor) {
+    if (valor == view2['data'][("0").toString()]) {
       inicio = double.parse(chave);
     }
-  });
+  });*/
 
     // setando os valores de predição no grafico
-    for(int a = 0; a < view2[0]['resultado'].length; a++){
-      chartData1.insert(a, FlSpot((inicio+=1).toDouble(), view2[0]['resultado'][a.toString()]));
-    }
+    /*for(int a = 0; a < view2['resultado'].length; a++){
+      chartData1.insert(a, FlSpot((inicio+=1).toDouble(), view2['resultado'][a.toString()]));
+    }*/
     //setando os valores de media movel no grafico plotados 14 semanas a frente 
     double contador = 13;
-    for(int a = 0; a < view3['media movel'].length; a++){
+    for(int a = 0; a < view2['media movel'].length; a++){
       
-      chartData_media_movel.insert(a, FlSpot(contador, view3['media movel'][a.toString()]));
+      chartData_media_movel.insert(a, FlSpot(contador, view2['media movel'][a.toString()]));
       contador+=1;
       
     }
@@ -74,6 +103,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
       contador+=1;
       
     }
+    //setando os dados inf boll
     contador = 13;
     for(int a = 0; a < view3['banda inf boll'].length; a++){
       
@@ -87,7 +117,9 @@ class _GraficoLinearState extends State<GraficoLinear> {
     maiorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual > elemento ? valorAtual : elemento);
     maiorValor = double.parse(maiorValor!.toStringAsFixed(0)) + 5;
     menorValor = double.parse(menorValor!.toStringAsFixed(0)) - 5;
-   
+    
+    
+
     return chartData;
   }
 
@@ -118,7 +150,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
           color: Colors.blue,
           barWidth: 3,
         ),
-        //predicoes:
+        /*//predicoes:
         LineChartBarData(
           spots: chartData1,
           isCurved: false,
@@ -128,7 +160,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
           color: Colors.red,
           barWidth: 3,
         ),
-        //media movel:
+        *///media movel:
         LineChartBarData(
           spots: chartData_media_movel,
           isCurved: false,
@@ -160,20 +192,26 @@ class _GraficoLinearState extends State<GraficoLinear> {
         ),
         
       ],
-      borderData: FlBorderData(
-          border: const Border(bottom: BorderSide(), left: BorderSide())),
-      gridData: const FlGridData(show: false),
-      titlesData: const FlTitlesData(
-        leftTitles: AxisTitles(
-            axisNameSize: 5,
-            sideTitles: SideTitles(showTitles: true, reservedSize: 30)),
-        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      ),
+      titlesData:FlTitlesData(show: true, 
+      
+      leftTitles: AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: true, interval: 10)), 
+      
+      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40, )), 
+      
+      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40)), 
+      
+      bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 14, getTitlesWidget: bottomTitleWidgets)), 
+      
+      
+      
+      ), 
+      borderData: FlBorderData(border: Border.all(color: Colors.black, width: 5.0, style: BorderStyle.solid)),
       minX: 0,
-      maxX: quant,
+      maxX: null,//quant,
       minY: menorValor,
       maxY: maiorValor,
+      backgroundColor: Colors.black87
+      //clipData: FlClipData.none(),
     )
             // Resto do seu código do gráfico
           );
@@ -227,11 +265,11 @@ class _GraficoLinearState extends State<GraficoLinear> {
     String jsonData = await rootBundle.loadString('asset/Empresas_data/' + cardIndex + '_fundamentalist.json');
     view = jsonDecode(jsonData);
     filteredView = view;
-    print(filteredView[0]['Close']);
+    print(filteredView['Close']);
     
     for(int a = 0; a < chartData.length; a++){
-      predicaoValor.insert(a,filteredView[0]['Close'][a.toString()]);
-      chartData[a] = FlSpot(a.toDouble(), filteredView[0]['Close'][a.toString()]);
+      predicaoValor.insert(a,filteredView['Close'][a.toString()]);
+      chartData[a] = FlSpot(a.toDouble(), filteredView['Close'][a.toString()]);
     }
     menorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual < elemento ? valorAtual : elemento);
     maiorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual > elemento ? valorAtual : elemento);

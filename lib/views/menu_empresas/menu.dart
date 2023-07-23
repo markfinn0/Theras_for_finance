@@ -128,9 +128,9 @@ class _MenuContainerState extends State<MenuContainer> {
                             child: Stack(
                               children: [
                                 Positioned(
-                                  top: 0,
+                                  top: 15,
                                   left: 0,
-                                  right: 150,
+                                  right: 200,
                                   child: Container(
                                     height: 75,
                                     child: Align(
@@ -138,17 +138,17 @@ class _MenuContainerState extends State<MenuContainer> {
                                       child: Text(
                                         tick,
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 30,
-                                        ),
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ),
                                 ),
                                 Positioned(
-                                  top: 50,
-                                  left: 0,
-                                  right: 150,
+                                  top: 65,
+                                  left: 5,
+                                  right: 200,
                                   child: Container(
                                     height: 60,
                                     child: Align(
@@ -157,7 +157,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                         sector,
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 15,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ),
@@ -165,12 +165,11 @@ class _MenuContainerState extends State<MenuContainer> {
                                 ),
                                 Positioned(
                                   top: 0,
-                                  left: 200,
-                                  right: 0,
+                                  right: 5,
                                   child: Container(
                                     height: 30,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerRight,
                                       child: Text(
                                         'Preço Médio',
                                         style: TextStyle(
@@ -182,18 +181,17 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 25,
-                                  left: 200,
-                                  right: 0,
+                                  top: 20,
+                                  right: 5,
                                   child: Container(
                                     height: 30,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerRight,
                                       child: Text(
                                         PM,
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 24,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
@@ -201,12 +199,11 @@ class _MenuContainerState extends State<MenuContainer> {
                                 ),
                                 Positioned(
                                   top: 60,
-                                  left: 200,
-                                  right: 0,
+                                  right: 5,
                                   child: Container(
                                     height: 30,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerRight,
                                       child: Text(
                                         'PL',
                                         style: TextStyle(
@@ -220,25 +217,24 @@ class _MenuContainerState extends State<MenuContainer> {
                                 Positioned(
                                   top: 82,
                                   left: 200,
-                                  right: 0,
+                                  right: 5,
                                   child: Container(
                                     height: 30,
                                     child: Align(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerRight,
                                       child: Text(
                                         PL,
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 24,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                                 Positioned(
-                                  top: 45,
-                                  left: 142,
-                                  right: 95,
+                                  top: 25,
+                                  right: 145,
                                   child: Container(
                                     height: 60,
                                     child: (() {
@@ -261,9 +257,8 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 40,
-                                  left: 142,
-                                  right: 95,
+                                  top: 20,
+                                  right: 135,
                                   child: Container(
                                     height: 30,
                                     child: Align(
@@ -304,18 +299,17 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 30,
-                                  left: 165,
-                                  right: 100,
+                                  top: 5,
+                                  right: 140,
                                   child: Container(
                                     height: 20,
                                     child: Align(
-                                      alignment: Alignment.centerLeft,
+                                      alignment: Alignment.center,
                                       child: Text(
-                                        "Prev. 14W",
+                                        "Previsão",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 12,
+                                          fontSize: 10,
                                         ),
                                       ),
                                     ),
@@ -372,6 +366,23 @@ class _MenuContainerState extends State<MenuContainer> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 65,
+                                  right: 130,
+                                  child: Container(
+                                    height: 20,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "14 Semanas",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10,
                                         ),
                                       ),
                                     ),
