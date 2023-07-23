@@ -72,10 +72,17 @@ class DetailsScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: FutureBuilder<String>(
               future: rootBundle.loadString(
+<<<<<<< HEAD
+                  'asset/Empresas_data/' + cardIndex + '_fundamentalist.json'),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+=======
                   'asset/Empresas_data/${cardIndex}_fundamentalist.json'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
@@ -91,9 +98,12 @@ class DetailsScreen extends StatelessWidget {
                   String LucroLiqu = view[0]['LucroLiqu'];
                   String Valormercado = view[0]['Valormercado'];
 
+<<<<<<< HEAD
+=======
                   double screenWidth = MediaQuery.of(context).size.width;
                   double screenHeight = MediaQuery.of(context).size.width;
 
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                   return LayoutBuilder(
                     builder: (BuildContext context,
                         BoxConstraints viewportConstraints) {
@@ -105,12 +115,16 @@ class DetailsScreen extends StatelessWidget {
                               minHeight: 600, maxWidth: 1080),
                           child: Column(children: [
                             Container(
+<<<<<<< HEAD
+                              padding: const EdgeInsets.only(bottom: 30),
+=======
                               // padding: const EdgeInsets.only(bottom: 30),
                               padding: EdgeInsets.fromLTRB(
                                   screenWidth > 1000 ? 100 : 0,
                                   0,
                                   screenWidth > 1000 ? 100 : 0,
                                   30),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                               child: Column(
                                 children: [
                                   Container(
@@ -121,12 +135,20 @@ class DetailsScreen extends StatelessWidget {
                                           direction: Axis.vertical,
                                           children: [
                                             Text(
+<<<<<<< HEAD
+                                              "Último Resultado: " + UBL,
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                            borderedContainer(cardIndex,
+                                                color: Color.fromRGBO(
+=======
                                               "Último Resultado: $UBL",
                                               style:
                                                   const TextStyle(fontSize: 12),
                                             ),
                                             borderedContainer(cardIndex,
                                                 color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                     8, 32, 50, 50),
                                                 fontSize: 30,
                                                 corTexto: Colors.white,
@@ -138,13 +160,23 @@ class DetailsScreen extends StatelessWidget {
                                         const Spacer(),
                                         Expanded(
                                           flex: 4,
+<<<<<<< HEAD
+                                          child: Container(
+=======
                                           child: SizedBox(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                             width:
                                                 90, // Defina o tamanho desejado da largura da imagem
                                             height:
                                                 80, // Defina o tamanho desejado da altura da imagem
                                             child: Image.asset(
+<<<<<<< HEAD
+                                              'image/company_imagens/' +
+                                                  cardIndex +
+                                                  '.png',
+=======
                                               'image/company_imagens/$cardIndex.png',
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               fit: BoxFit
                                                   .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
                                             ),
@@ -186,7 +218,11 @@ class DetailsScreen extends StatelessWidget {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer("Nome:",
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -195,7 +231,11 @@ class DetailsScreen extends StatelessWidget {
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer("Setor:",
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -213,12 +253,20 @@ class DetailsScreen extends StatelessWidget {
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           10, 15, 10, 15),
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer(sector,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -229,7 +277,11 @@ class DetailsScreen extends StatelessWidget {
                                   ]),
                                   borderedContainer(
                                     "Indicadores Relativos",
+<<<<<<< HEAD
+                                    color: Color.fromRGBO(8, 32, 50, 50),
+=======
                                     color: const Color.fromRGBO(8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                     padding: const EdgeInsets.fromLTRB(
                                         10, 15, 10, 15),
                                     corTexto: Colors.white,
@@ -243,8 +295,13 @@ class DetailsScreen extends StatelessWidget {
                                           direction: Axis.vertical,
                                           children: [
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "Valor de Mercado:",
                                                 alignment: Alignment.centerLeft,
@@ -255,8 +312,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "Lucro Líquido:",
                                                 alignment: Alignment.centerLeft,
@@ -267,8 +329,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "Cres.Rec 5 anos:",
                                                 alignment: Alignment.centerLeft,
@@ -279,8 +346,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "P/L:",
                                                 alignment: Alignment.centerLeft,
@@ -291,8 +363,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "Dividend Yield:",
                                                 alignment: Alignment.centerLeft,
@@ -303,8 +380,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "ROE:",
                                                 alignment: Alignment.centerLeft,
@@ -315,8 +397,13 @@ class DetailsScreen extends StatelessWidget {
                                               ),
                                             ), // Sem borda
                                             Container(
+<<<<<<< HEAD
+                                              color:
+                                                  Color.fromRGBO(8, 32, 50, 50),
+=======
                                               color: const Color.fromRGBO(
                                                   8, 32, 50, 50),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                               child: borderedContainer(
                                                 "Lucro por Ação:",
                                                 alignment: Alignment.centerLeft,
@@ -335,7 +422,11 @@ class DetailsScreen extends StatelessWidget {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer(Valormercado,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -343,7 +434,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LucroLiqu,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -351,7 +446,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(CR5,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -359,7 +458,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(PL,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -367,7 +470,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(DY,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -375,7 +482,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(ROE,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -383,7 +494,11 @@ class DetailsScreen extends StatelessWidget {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LPA,
+<<<<<<< HEAD
+                                                  color: Color.fromRGBO(
+=======
                                                   color: const Color.fromRGBO(
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -401,7 +516,11 @@ class DetailsScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
+<<<<<<< HEAD
+                              padding: const EdgeInsets.only(top: 80),
+=======
                               padding: const EdgeInsets.only(top: 10),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                               child: Column(
                                 children: [
                                   Container(
@@ -432,17 +551,33 @@ class DetailsScreen extends StatelessWidget {
                                       Expanded(
                                         flex: 60,
                                         child: Container(
+<<<<<<< HEAD
+                                          
+=======
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                           margin:
                                               const EdgeInsets.only(right: 10),
                                           padding: const EdgeInsets.all(15),
                                           decoration: BoxDecoration(
                                             border: Border.all(
+<<<<<<< HEAD
+                                              
+                                                color: Colors.black87),
+                                          ),
+                                          child: SizedBox(
+                                            
+                                            height: 350,
+                                            // width: 100,
+                                            child: GraficoLinear(cardIndex), 
+                                            
+=======
                                                 color: Colors.black87),
                                           ),
                                           child: SizedBox(
                                             height: 350,
                                             // width: 100,
                                             child: GraficoLinear(cardIndex),
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                                           ),
                                         ),
                                       ),
@@ -457,7 +592,11 @@ class DetailsScreen extends StatelessWidget {
                     },
                   );
                 } else {
+<<<<<<< HEAD
+                  return Center(child: Text('Nenhum dado encontrado.'));
+=======
                   return const Center(child: Text('Nenhum dado encontrado.'));
+>>>>>>> 995a7e072c795ab755840d017abb8c4b13e9a79d
                 }
               },
             ),
