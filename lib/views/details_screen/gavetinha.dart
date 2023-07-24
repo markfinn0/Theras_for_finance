@@ -14,15 +14,19 @@ class ListaGavetinha {
       ];
 }
 
+typedef void StringCallback(String val);
+
 class Gavetinha extends StatefulWidget {
   late Color backgroundColorParam;
   late Color textColorParam;
   late String legendaParam;
   late List<String> listaParam;
+  late StringCallback? callback;
   // final Color textColor = Colors.black;
   Gavetinha(String legenda, List<String> lista,
       {Color backgroundColor = Colors.white,
       Color textColor = Colors.black,
+      this.callback,
       super.key}) {
     backgroundColorParam = backgroundColor;
     textColorParam = textColor;
@@ -31,7 +35,7 @@ class Gavetinha extends StatefulWidget {
   }
 
   @override
-  State<Gavetinha> createState() => GavetinhaState2();
+  State<Gavetinha> createState() => GavetinhaState();
 }
 
 class GavetinhaState extends State<Gavetinha> {
@@ -40,6 +44,7 @@ class GavetinhaState extends State<Gavetinha> {
   late Color backgroundColor;
   late Color textColor;
   late String legenda;
+  late StringCallback? callback;
   @override
   void initState() {
     super.initState();
@@ -48,58 +53,7 @@ class GavetinhaState extends State<Gavetinha> {
     legenda = widget.legendaParam;
     lista = widget.listaParam;
     dropdownValue = lista.first;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        // decoration: BoxDecoration(color: backgroundColor),
-        decoration: BoxDecoration(color: backgroundColor),
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: Column(children: [
-          Text(
-            legenda,
-            style: TextStyle(color: textColor),
-          ),
-          DropdownButton<String>(
-            value: dropdownValue,
-            icon: null,
-            dropdownColor: backgroundColor,
-            focusColor: backgroundColor,
-            underline: null,
-            elevation: 16,
-            style: TextStyle(color: textColor),
-            onChanged: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                dropdownValue = value!;
-              });
-            },
-            items: lista.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          )
-        ]));
-  }
-}
-
-class GavetinhaState2 extends State<Gavetinha> {
-  late List<String> lista;
-  late String dropdownValue;
-  late Color backgroundColor;
-  late Color textColor;
-  late String legenda;
-  @override
-  void initState() {
-    super.initState();
-    backgroundColor = widget.backgroundColorParam;
-    textColor = widget.textColorParam;
-    legenda = widget.legendaParam;
-    lista = widget.listaParam;
-    dropdownValue = lista.first;
+    callback = widget.callback;
   }
 
   @override
@@ -120,10 +74,12 @@ class GavetinhaState2 extends State<Gavetinha> {
             elevation: 16,
             style: TextStyle(color: textColor),
             onChanged: (String? value) {
-              // This is called when the user selects an item.
               setState(() {
                 dropdownValue = value!;
               });
+              if (callback != null) {
+                callback!(value!);
+              }
             },
             items: lista.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(

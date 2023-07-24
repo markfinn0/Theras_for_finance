@@ -5,19 +5,27 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import '../menu_empresas/footer.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final String cardIndex;
   final String color_company;
   final String PM;
   final String nome_company;
   final String sector;
-
-  final double breakpoint = 800;
-  final int paneProportion = 50;
-
+  // final Color textColor = Colors.black;
   const DetailsScreen(this.cardIndex, this.color_company, this.PM,
       this.nome_company, this.sector,
       {super.key});
+
+  @override
+  State<DetailsScreen> createState() => DetailsScreenState();
+}
+
+class DetailsScreenState extends State<DetailsScreen> {
+  final double breakpoint = 800;
+  final int paneProportion = 50;
+  String tipoDeGrafico = "Price";
+
+  DetailsScreenState();
 
   Widget _getStatusContainer(String colorCompany) {
     Color backgroundColor;
@@ -72,8 +80,9 @@ class DetailsScreen extends StatelessWidget {
             margin: const EdgeInsets.only(top: 30, bottom: 50),
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: FutureBuilder<String>(
-              future: rootBundle.loadString(
-                  'asset/Empresas_data/' + cardIndex + '_fundamentalist.json'),
+              future: rootBundle.loadString('asset/Empresas_data/' +
+                  widget.cardIndex +
+                  '_fundamentalist.json'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -118,7 +127,7 @@ class DetailsScreen extends StatelessWidget {
                                               "Último Resultado: " + UBL,
                                               style: TextStyle(fontSize: 12),
                                             ),
-                                            borderedContainer(cardIndex,
+                                            borderedContainer(widget.cardIndex,
                                                 color: Color.fromRGBO(
                                                     8, 32, 50, 50),
                                                 fontSize: 30,
@@ -140,7 +149,7 @@ class DetailsScreen extends StatelessWidget {
                                                 ),
                                                 PriceCard(
                                                   "Médio",
-                                                  PM,
+                                                  widget.PM,
                                                   backgroundColor:
                                                       Colors.orange,
                                                 ),
@@ -163,7 +172,7 @@ class DetailsScreen extends StatelessWidget {
                                                 80, // Defina o tamanho desejado da altura da imagem
                                             child: Image.asset(
                                               'image/company_imagens/' +
-                                                  cardIndex +
+                                                  widget.cardIndex +
                                                   '.png',
                                               fit: BoxFit
                                                   .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
@@ -203,7 +212,8 @@ class DetailsScreen extends StatelessWidget {
                                         child: Flex(
                                             direction: Axis.vertical,
                                             children: [
-                                              borderedContainer(nome_company,
+                                              borderedContainer(
+                                                  widget.nome_company,
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           10, 15, 10, 15),
@@ -211,7 +221,7 @@ class DetailsScreen extends StatelessWidget {
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft),
-                                              borderedContainer(sector,
+                                              borderedContainer(widget.sector,
                                                   color: Color.fromRGBO(
                                                       245, 255, 250, 1.0),
                                                   padding:
@@ -389,7 +399,8 @@ class DetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                   Container(
-                                    child: _getStatusContainer(color_company),
+                                    child: _getStatusContainer(
+                                        widget.color_company),
                                   ),
                                 ],
                               ),
@@ -403,18 +414,34 @@ class DetailsScreen extends StatelessWidget {
                                         20, 0, 20, 20),
                                     child: Row(
                                       children: [
-                                        Gavetinha(
-                                          "TIPO DE GRÁFICO",
-                                          ListaGavetinha().tipoDeGraficoLista,
-                                          textColor: Colors.white,
-                                          backgroundColor: Colors.black,
+                                        Gavetinha("TIPO DE GRÁFICO",
+                                            ListaGavetinha().tipoDeGraficoLista,
+                                            textColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            callback: (val) => setState(
+                                                () => tipoDeGrafico = val)),
+                                        Visibility(
+                                          visible: (tipoDeGrafico == "Price"),
+                                          child: Row(children: [
+                                            Gavetinha(
+                                                "INDICADORES",
+                                                ListaGavetinha()
+                                                    .indicadoresPriceLista),
+                                            Gavetinha(
+                                                "AÇÃO",
+                                                ListaGavetinha()
+                                                    .acoesPriceLista),
+                                          ]),
                                         ),
-                                        Gavetinha(
-                                            "INDICADORES",
-                                            ListaGavetinha()
-                                                .indicadoresPriceLista),
-                                        Gavetinha("AÇÃO",
-                                            ListaGavetinha().acoesPriceLista),
+                                        Visibility(
+                                          visible: (tipoDeGrafico != "Price"),
+                                          child: Row(children: [
+                                            Gavetinha(
+                                                "INDICADORES",
+                                                ListaGavetinha()
+                                                    .indicadoresFundamentalistasLista)
+                                          ]),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -436,7 +463,8 @@ class DetailsScreen extends StatelessWidget {
                                           child: SizedBox(
                                             height: 500,
                                             // width: 100,
-                                            child: GraficoLinear(cardIndex),
+                                            child:
+                                                GraficoLinear(widget.cardIndex),
                                           ),
                                         ),
                                       ),
