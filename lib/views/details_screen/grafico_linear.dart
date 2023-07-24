@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
-List<FlSpot> chartData1 = [];
-List<FlSpot> chartData_media_movel = [];
-List<FlSpot> chartData_sup_boll= [];
-List<FlSpot> chartData_inf_boll= [];
+
 late String jsonData;
 late String jsonData1;
 late String jsonData2;
+List <dynamic> predicaoValor = [];
 
 
 class GraficoLinear extends StatefulWidget {
@@ -27,13 +25,16 @@ class _GraficoLinearState extends State<GraficoLinear> {
   //List<dynamic> view2 = [];
   
   var inicio;
-  Map<String, dynamic> ?view;
+  late Map<String, dynamic> view;
   late Map<String, dynamic> view2;
   late Map<String, dynamic> view3;
   double ?quant;
   double ?menorValor;
   double ?maiorValor;
-  List <dynamic> predicaoValor = [];
+  List<FlSpot> chartData1 = [];
+  List<FlSpot> chartData_media_movel = [];
+  List<FlSpot> chartData_sup_boll= [];
+  List<FlSpot> chartData_inf_boll= [];
   List<FlSpot> chartData = [];
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -139,6 +140,54 @@ class _GraficoLinearState extends State<GraficoLinear> {
           // Quando os dados estiverem prontos, você pode construir o gráfico.
           chartData = snapshot.data ?? [];
           return LineChart(LineChartData(
+            // detalhes de iteração do grafico
+            /*lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(
+                    tooltipBgColor: Colors.white,
+                    getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                      return touchedBarSpots.map((barSpot) {
+                        final flSpot = barSpot;
+                        /*if (flSpot.x == 0 || flSpot.x == 6) {
+                          return null;
+                        }*/
+
+                        
+                        
+
+                        return LineTooltipItem(
+                          '${view?['Data'][flSpot.x.toString()]}\n',
+                          TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [const TextSpan(
+                              text: 'Close: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                
+                              ),
+                            ),
+                            TextSpan(
+                              text: flSpot.y.toString(),
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            /*const TextSpan(
+                              text: ' k ',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),*/
+                            
+                          ],
+                          textAlign: TextAlign.center,
+                        );
+                      }).toList();
+                    },
+                  ),),
+*/
       lineBarsData: [
         //cotacoes:
         LineChartBarData(
@@ -148,7 +197,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
             show: false,
           ),
           color: Colors.blue,
-          barWidth: 3,
+          barWidth: 1.5,
         ),
         /*//predicoes:
         LineChartBarData(
@@ -168,7 +217,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
             show: false,
           ),
           color: Colors.orange,
-          barWidth: 3,
+          barWidth: 1.5,
         ),
         // banda sup boll
         LineChartBarData(
@@ -178,7 +227,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
             show: false,
           ),
           color: const Color.fromARGB(255, 194, 98, 211),
-          barWidth: 3,
+          barWidth: 1.5,
         ),
         // banda inf boll
         LineChartBarData(
@@ -188,7 +237,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
             show: false,
           ),
           color: const Color.fromARGB(255, 194, 98, 211),
-          barWidth: 3,
+          barWidth: 1.5,
         ),
         
       ],
@@ -200,7 +249,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
       
       rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40)), 
       
-      bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 14, getTitlesWidget: bottomTitleWidgets)), 
+      bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 35, getTitlesWidget: bottomTitleWidgets)), 
       
       
       
@@ -212,6 +261,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
       maxY: maiorValor,
       backgroundColor: Colors.black87
       //clipData: FlClipData.none(),
+    
     )
             // Resto do seu código do gráfico
           );
@@ -314,3 +364,346 @@ class _GraficoLinearState extends State<GraficoLinear> {
   }
 }
 */
+
+
+/*import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/services.dart';
+
+late String jsonData;
+late String jsonData1;
+late String jsonData2;
+List <dynamic> predicaoValor = [];
+
+
+class GraficoLinear extends StatefulWidget {
+  final String cardIndex;
+
+  GraficoLinear(this.cardIndex, {Key? key}) : super(key: key);
+  
+  @override
+  _GraficoLinearState createState() => _GraficoLinearState();
+}
+
+class _GraficoLinearState extends State<GraficoLinear> {
+  
+  //List<dynamic> view = [];
+  //List<dynamic> view2 = [];
+  
+  var inicio;
+  Map<String, dynamic> ?view;
+  late Map<String, dynamic> view2;
+  late Map<String, dynamic> view3;
+  double ?quant;
+  double ?menorValor;
+  double ?maiorValor;
+  
+  List<FlSpot> chartData = [];
+  List<FlSpot> chartData1 = [];
+  List<FlSpot> chartData_media_movel = [];
+  List<FlSpot> chartData_sup_boll= [];
+  List<FlSpot> chartData_inf_boll= [];
+
+  List<LineTooltipItem> tooltipItemsLinha1(List<LineBarSpot> touchedBarSpots) {
+  return touchedBarSpots.map((barSpot) {
+    final flSpot = barSpot;
+    return LineTooltipItem(
+      '${view?['Data'][flSpot.x.toString()]}\n',
+      TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
+      children: [
+        const TextSpan(
+          text: 'Linha 1: ',
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        TextSpan(
+          text: flSpot.y.toString(),
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ],
+      textAlign: TextAlign.center,
+    );
+  }).toList();
+}
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 9,
+    );
+    Widget text;
+    String texto = view?['Data'][value.toString()];
+    text = Text(texto, style: style);
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      angle: -90,
+
+      space: 10,
+      child: text,
+      
+    );
+  }
+  Future<List<FlSpot>> testandoFunc() async {
+    
+    jsonData = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+    jsonData1 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
+    //String jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
+    jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_bandas_boll.json');
+    //print(widget.cardIndex);
+    view = jsonDecode(jsonData);
+    view2 = jsonDecode(jsonData1);
+    view3 = json.decode(jsonData2);
+    //Map<String, dynamic> view4 = json.decode(jsonData3);
+
+
+    //print(view);
+    quant = view?['Close'].length;//determinando limites no eixo x do grafico
+    
+    //setando o array com os valores de cotação no grafico
+    for(int a = 0; a < view?['Close'].length; a++){
+      predicaoValor.insert(a,view?['Close'][a.toString()]);
+      chartData.insert(a, FlSpot(a.toDouble(), view?['Close'][a.toString()]));
+      
+    }
+    
+    // localizando onde começam as predicoes
+  /*  view['Data'].forEach((chave, valor) {
+    if (valor == view2['data'][("0").toString()]) {
+      inicio = double.parse(chave);
+    }
+  });*/
+
+    // setando os valores de predição no grafico
+    /*for(int a = 0; a < view2['resultado'].length; a++){
+      chartData1.insert(a, FlSpot((inicio+=1).toDouble(), view2['resultado'][a.toString()]));
+    }*/
+    //setando os valores de media movel no grafico plotados 14 semanas a frente 
+    double contador = 13;
+    for(int a = 0; a < view2['media movel'].length; a++){
+      
+      chartData_media_movel.insert(a, FlSpot(contador, view2['media movel'][a.toString()]));
+      contador+=1;
+      
+    }
+    // setando os valores de banda sup bollinger no grafico plotados a 14 semanas a frente 
+    contador = 13;
+    for(int a = 0; a < view3['banda sup boll'].length; a++){
+      
+      chartData_sup_boll.insert(a, FlSpot(contador, view3['banda sup boll'][a.toString()]));
+      contador+=1;
+      
+    }
+    //setando os dados inf boll
+    contador = 13;
+    for(int a = 0; a < view3['banda inf boll'].length; a++){
+      
+      chartData_inf_boll.insert(a, FlSpot(contador, view3['banda inf boll'][a.toString()]));
+      contador+=1;
+      
+    }
+    
+    //determinando limites no tamanho do grafico
+    menorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual < elemento ? valorAtual : elemento);
+    maiorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual > elemento ? valorAtual : elemento);
+    maiorValor = double.parse(maiorValor!.toStringAsFixed(0)) + 5;
+    menorValor = double.parse(menorValor!.toStringAsFixed(0)) - 5;
+    
+    
+
+    return chartData;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<FlSpot>>(
+      future: testandoFunc(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Aqui você pode mostrar algum indicador de carregamento enquanto os dados estão sendo processados.
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          // Caso ocorra um erro durante o processamento dos dados, você pode tratar aqui.
+          return Text('Erro ao carregar os dados');
+        } else {
+          // Quando os dados estiverem prontos, você pode construir o gráfico.
+          chartData = snapshot.data ?? [];
+          return LineChart(LineChartData(
+            // detalhes de iteração do grafico
+            lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(
+                    tooltipBgColor: Colors.white,
+                    /*getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                      print(touchedBarSpots[0]);
+                      return tooltipItemsLinha1(touchedBarSpots);
+                    },*/getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                  // Criar uma lista para armazenar os tooltips para cada linha
+                  List<LineTooltipItem> tooltips = [];
+
+                  // Loop através dos pontos tocados e adicionar tooltips apropriados
+                  for (var i = 0; i < touchedBarSpots.length; i++) {
+                    print('estou aqui '+ touchedBarSpots.length.toString());
+                    
+                    final flSpot = touchedBarSpots[i];
+                    
+                    // Verifique a qual linha pertence o ponto tocado
+                    if (i < chartData.length) {
+                      // Linha de dados (cotações)
+                      tooltips.add(
+                        LineTooltipItem(
+                          '${view?['Data'][flSpot.x.toString()]}\n',
+                          TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            const TextSpan(
+                              text: 'Cotações: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            TextSpan(
+                              text: flSpot.y.toString(),
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+        
+                    } else if (i < chartData.length + chartData_media_movel.length) {
+                      
+                      // Linha da média móvel
+                      final index = i - chartData.length;
+                      if (index < chartData_media_movel.length) {
+                        final mediaMovelSpot = chartData_media_movel[index];
+                        tooltips.add(
+                          LineTooltipItem(
+                            '${view?['Data'][mediaMovelSpot.x.toString()]}\n',
+                            TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              const TextSpan(
+                                text: 'Média Móvel: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              TextSpan(
+                                text: mediaMovelSpot.y.toString(),
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ],
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                    } else {
+                      // Linhas adicionais (por exemplo, bandas bollinger)
+                      // Adicione as condições para cada linha adicional, se necessário
+                    }
+                  }
+
+                  return tooltips;
+                },
+                  ),),
+
+      lineBarsData: [
+        //cotacoes:
+        LineChartBarData(
+          spots: chartData,
+          isCurved: false,
+          dotData: const FlDotData(
+            show: false,
+          ),
+          color: Colors.blue,
+          barWidth: 1.5,
+        ),
+        /*//predicoes:
+        LineChartBarData(
+          spots: chartData1,
+          isCurved: false,
+          dotData: const FlDotData(
+            show: false,
+          ),
+          color: Colors.red,
+          barWidth: 3,
+        ),
+        *///media movel:
+        LineChartBarData(
+          spots: chartData_media_movel,
+          isCurved: false,
+          dotData: const FlDotData(
+            show: false,
+          ),
+          color: Colors.orange,
+          barWidth: 1.5,
+        ),
+        // banda sup boll
+        LineChartBarData(
+          spots: chartData_sup_boll,
+          isCurved: false,
+          dotData: const FlDotData(
+            show: false,
+          ),
+          color: const Color.fromARGB(255, 194, 98, 211),
+          barWidth: 1.5,
+        ),
+        // banda inf boll
+        LineChartBarData(
+          spots: chartData_inf_boll,
+          isCurved: false,
+          dotData: const FlDotData(
+            show: false,
+          ),
+          color: const Color.fromARGB(255, 194, 98, 211),
+          barWidth: 1.5,
+        ),
+        
+      ],
+      titlesData:FlTitlesData(show: true, 
+      
+      leftTitles: AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: true, interval: 10)), 
+      
+      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40, )), 
+      
+      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40)), 
+      
+      bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 70, getTitlesWidget: bottomTitleWidgets)), 
+      
+      
+      
+      ), 
+      borderData: FlBorderData(border: Border.all(color: Colors.black, width: 5.0, style: BorderStyle.solid)),
+      minX: 0,
+      maxX: null,//quant,
+      minY: menorValor,
+      maxY: maiorValor,
+      backgroundColor: Colors.black87
+      //clipData: FlClipData.none(),
+    
+    )
+            // Resto do seu código do gráfico
+          );
+        }
+      },
+    );
+  }
+} */
