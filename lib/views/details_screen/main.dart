@@ -23,7 +23,8 @@ class DetailsScreen extends StatefulWidget {
 class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
-  String tipoDeGrafico = "Price";
+  String tipoDeGrafico = "Finanças";
+  String tipoDeGrafico2 = "Patrimônio Líquido";
 
   DetailsScreenState();
 
@@ -80,15 +81,12 @@ class DetailsScreenState extends State<DetailsScreen> {
             margin: const EdgeInsets.only(top: 30, bottom: 50),
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: FutureBuilder<String>(
-
-
               future: rootBundle.loadString('asset/Empresas_data/' +
                   widget.cardIndex +
                   '_fundamentalist.json'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
-
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
@@ -104,9 +102,6 @@ class DetailsScreenState extends State<DetailsScreen> {
                   String LucroLiqu = view[0]['LucroLiqu'];
                   String Valormercado = view[0]['Valormercado'];
 
-
-
-
                   return LayoutBuilder(
                     builder: (BuildContext context,
                         BoxConstraints viewportConstraints) {
@@ -118,10 +113,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                               minHeight: 800, maxWidth: 1280),
                           child: Column(children: [
                             Container(
-
                               width: 800,
                               padding: const EdgeInsets.only(bottom: 10),
-
                               child: Column(
                                 children: [
                                   Container(
@@ -132,14 +125,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           direction: Axis.vertical,
                                           children: [
                                             Text(
-
-
                                               "Último Resultado: " + UBL,
                                               style: TextStyle(fontSize: 12),
                                             ),
                                             borderedContainer(widget.cardIndex,
                                                 color: Color.fromRGBO(
-
                                                     8, 32, 50, 50),
                                                 fontSize: 30,
                                                 corTexto: Colors.white,
@@ -148,8 +138,6 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                         30, 20, 30, 20))
                                           ],
                                         ),
-
-
                                         Flex(
                                           direction: Axis.vertical,
                                           children: [
@@ -187,8 +175,17 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               'image/company_imagens/' +
                                                   widget.cardIndex +
                                                   '.png',
-                                              fit: BoxFit
-                                                  .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
+                                              fit: BoxFit.contain,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                // Este bloco é executado quando a imagem não pôde ser carregada
+                                                // Exiba uma imagem de substituição ou um ícone para indicar que a imagem não está disponível
+                                                return Icon(
+                                                  Icons.error_outline,
+                                                  size: 48,
+                                                  color: Colors.red,
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -202,9 +199,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer("Nome:",
-
                                                   color: Color.fromRGBO(
-
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -213,9 +208,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer("Setor:",
-
                                                   color: Color.fromRGBO(
-
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -234,15 +227,12 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           10, 15, 10, 15),
-
-
                                                   color: Color.fromRGBO(
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer(widget.sector,
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -253,9 +243,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   ]),
                                   borderedContainer(
                                     "Indicadores Relativos",
-
                                     color: Color.fromRGBO(8, 32, 50, 50),
-
                                     padding: const EdgeInsets.fromLTRB(
                                         10, 15, 10, 15),
                                     corTexto: Colors.white,
@@ -269,10 +257,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           direction: Axis.vertical,
                                           children: [
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Valor de Mercado:",
                                                 alignment: Alignment.centerLeft,
@@ -285,7 +271,6 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             Container(
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Lucro Líquido:",
                                                 alignment: Alignment.centerLeft,
@@ -296,10 +281,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Cres.Rec 5 anos:",
                                                 alignment: Alignment.centerLeft,
@@ -310,10 +293,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "P/L:",
                                                 alignment: Alignment.centerLeft,
@@ -324,10 +305,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Dividend Yield:",
                                                 alignment: Alignment.centerLeft,
@@ -338,10 +317,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "ROE:",
                                                 alignment: Alignment.centerLeft,
@@ -352,10 +329,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Lucro por Ação:",
                                                 alignment: Alignment.centerLeft,
@@ -374,9 +349,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer(Valormercado,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -384,9 +357,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LucroLiqu,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -394,9 +365,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(CR5,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -404,9 +373,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(PL,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -414,9 +381,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(DY,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -424,9 +389,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(ROE,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -434,9 +397,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LPA,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -455,9 +416,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Container(
-
                               padding: const EdgeInsets.only(top: 80),
-
                               child: Column(
                                 children: [
                                   Container(
@@ -465,33 +424,62 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         20, 0, 20, 20),
                                     child: Row(
                                       children: [
-                                        Gavetinha("TIPO DE GRÁFICO",
-                                            ListaGavetinha().tipoDeGraficoLista,
-                                            textColor: Colors.white,
-                                            backgroundColor: Colors.black,
-                                            callback: (val) => setState(
-                                                () => tipoDeGrafico = val)),
+                                        Gavetinha(
+                                          "Visão",
+                                          ListaGavetinha().tipoDeGraficoLista,
+                                          textColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          callback: (val) => setState(
+                                              () => tipoDeGrafico = val),
+                                          callback2: (value) {
+                                            setState(() {
+                                              tipoDeGrafico2 = value;
+                                            });
+                                          },
+                                        ),
                                         Visibility(
                                           visible: (tipoDeGrafico == "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
-                                                    .indicadoresPriceLista),
-                                            Gavetinha(
-                                                "AÇÃO",
+                                                    .indicadoresPriceLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                              Gavetinha(
+                                                "Tipo",
                                                 ListaGavetinha()
-                                                    .acoesPriceLista),
-                                          ]),
+                                                    .acoesPriceLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Visibility(
                                           visible: (tipoDeGrafico != "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
-                                                    .indicadoresFundamentalistasLista)
-                                          ]),
+                                                    .indicadoresFundamentalistasLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -515,9 +503,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             height: 500,
                                             // width: 100,
 
-                                            child:
-                                                GraficoLinear(widget.cardIndex),
-
+                                            child: GraficoLinear(
+                                                widget.cardIndex,
+                                                tipoDeGrafico2),
                                           ),
                                         ),
                                       ),
@@ -532,7 +520,6 @@ class DetailsScreenState extends State<DetailsScreen> {
                     },
                   );
                 } else {
-
                   return Center(child: Text('Nenhum dado encontrado.'));
                 }
               },
