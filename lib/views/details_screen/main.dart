@@ -496,8 +496,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               const EdgeInsets.only(right: 10),
                                           padding: const EdgeInsets.all(15),
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black87),
+                                           /*border: Border.all(
+                                                color: Colors.black87),*/
                                           ),
                                           child: SizedBox(
                                             height: 500,
