@@ -8,14 +8,13 @@ class ListaGavetinha {
     
   List<String> get acoesPriceLista => <String>['PETR3', 'PETR4'];
   List<String> get indicadoresFundamentalistasLista => <String>[
-        'Patrimônio Líquido',
+       'Dividendos', 'Patrimônio Líquido',
         'Contas a Receber',
         'Passivo Total',
         'Despesas Trabalhistas',
         'Receita Líquida',
         'Reservas de Lucro',
-        'Lucro Líquido',
-        'Dividendos'
+        'Lucro Líquido'
       ];
 }
 
