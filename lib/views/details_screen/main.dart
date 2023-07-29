@@ -30,6 +30,7 @@ class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
   String tipoDeGrafico = "Finanças";
+<<<<<<< HEAD
   String tipoIndicador = "Média Móvel 14";
   String tipoIndicadorFinanca = 'Dividendos';
   List<String> tipoDeGraficoLista = ['Finanças'];//['Price', 'Finanças'];
@@ -37,6 +38,10 @@ class DetailsScreenState extends State<DetailsScreen> {
   
   late List<String> listaTicksEmpresa = [];
   
+=======
+  String tipoDeGrafico2 = "Patrimônio Líquido";
+
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
   DetailsScreenState();
   
   Widget _getStatusContainer(String colorCompany) {
@@ -123,15 +128,12 @@ Future<void> loadData() async {
             margin: const EdgeInsets.only(top: 30, bottom: 50),
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: FutureBuilder<String>(
-
-
               future: rootBundle.loadString('asset/Empresas_data/' +
                   widget.cardIndex +
                   '_fundamentalist.json'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
-
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
@@ -150,9 +152,6 @@ Future<void> loadData() async {
                   String LucroLiqu = view[0]['LucroLiqu'];
                   String Valormercado = view[0]['Valormercado'];
 
-
-
-
                   return LayoutBuilder(
                     builder: (BuildContext context,
                         BoxConstraints viewportConstraints) {
@@ -164,10 +163,8 @@ Future<void> loadData() async {
                               minHeight: 800, maxWidth: 1280),
                           child: Column(children: [
                             Container(
-
                               width: 800,
                               padding: const EdgeInsets.only(bottom: 10),
-
                               child: Column(
                                 children: [
                                   Container(
@@ -178,14 +175,11 @@ Future<void> loadData() async {
                                           direction: Axis.vertical,
                                           children: [
                                             Text(
-
-
                                               "Último Resultado: " + UBL,
                                               style: TextStyle(fontSize: 12),
                                             ),
                                             borderedContainer(widget.cardIndex,
                                                 color: Color.fromRGBO(
-
                                                     8, 32, 50, 50),
                                                 fontSize: 30,
                                                 corTexto: Colors.white,
@@ -194,8 +188,6 @@ Future<void> loadData() async {
                                                         30, 20, 30, 20))
                                           ],
                                         ),
-
-
                                         Flex(
                                           direction: Axis.vertical,
                                           children: [
@@ -233,8 +225,17 @@ Future<void> loadData() async {
                                               'image/company_imagens/' +
                                                   widget.cardIndex +
                                                   '.png',
-                                              fit: BoxFit
-                                                  .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
+                                              fit: BoxFit.contain,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                // Este bloco é executado quando a imagem não pôde ser carregada
+                                                // Exiba uma imagem de substituição ou um ícone para indicar que a imagem não está disponível
+                                                return Icon(
+                                                  Icons.error_outline,
+                                                  size: 48,
+                                                  color: Colors.red,
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -248,9 +249,7 @@ Future<void> loadData() async {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer("Nome:",
-
                                                   color: Color.fromRGBO(
-
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -259,9 +258,7 @@ Future<void> loadData() async {
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer("Setor:",
-
                                                   color: Color.fromRGBO(
-
                                                       8, 32, 50, 50),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -280,15 +277,12 @@ Future<void> loadData() async {
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           10, 15, 10, 15),
-
-
                                                   color: Color.fromRGBO(
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft),
                                               borderedContainer(widget.sector,
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -299,9 +293,7 @@ Future<void> loadData() async {
                                   ]),
                                   borderedContainer(
                                     "Indicadores Relativos",
-
                                     color: Color.fromRGBO(8, 32, 50, 50),
-
                                     padding: const EdgeInsets.fromLTRB(
                                         10, 15, 10, 15),
                                     corTexto: Colors.white,
@@ -315,10 +307,8 @@ Future<void> loadData() async {
                                           direction: Axis.vertical,
                                           children: [
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Valor de Mercado:",
                                                 alignment: Alignment.centerLeft,
@@ -331,7 +321,6 @@ Future<void> loadData() async {
                                             Container(
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Lucro Líquido:",
                                                 alignment: Alignment.centerLeft,
@@ -342,10 +331,8 @@ Future<void> loadData() async {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Cres.Rec 5 anos:",
                                                 alignment: Alignment.centerLeft,
@@ -356,10 +343,8 @@ Future<void> loadData() async {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "P/L:",
                                                 alignment: Alignment.centerLeft,
@@ -370,10 +355,8 @@ Future<void> loadData() async {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Dividend Yield:",
                                                 alignment: Alignment.centerLeft,
@@ -384,10 +367,8 @@ Future<void> loadData() async {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "ROE:",
                                                 alignment: Alignment.centerLeft,
@@ -398,10 +379,8 @@ Future<void> loadData() async {
                                               ),
                                             ), // Sem borda
                                             Container(
-
                                               color:
                                                   Color.fromRGBO(8, 32, 50, 50),
-
                                               child: borderedContainer(
                                                 "Lucro por Ação:",
                                                 alignment: Alignment.centerLeft,
@@ -420,9 +399,7 @@ Future<void> loadData() async {
                                             direction: Axis.vertical,
                                             children: [
                                               borderedContainer(Valormercado,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -430,9 +407,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LucroLiqu,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -440,9 +415,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(CR5,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -450,9 +423,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(PL,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -460,9 +431,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(DY,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -470,9 +439,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(ROE,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -480,9 +447,7 @@ Future<void> loadData() async {
                                                       const EdgeInsets.fromLTRB(
                                                           15, 5, 10, 5)),
                                               borderedContainer(LPA,
-
                                                   color: Color.fromRGBO(
-
                                                       245, 255, 250, 1.0),
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -501,9 +466,7 @@ Future<void> loadData() async {
                               ),
                             ),
                             Container(
-
                               padding: const EdgeInsets.only(top: 80),
-
                               child: Column(
                                 children: [
                                   Container(
@@ -511,18 +474,36 @@ Future<void> loadData() async {
                                         20, 0, 20, 20),
                                     child: Row(
                                       children: [
+<<<<<<< HEAD
                                         Gavetinha("TIPO DE GRÁFICO",
                                             tipoDeGraficoLista,
                                             textColor: Colors.white,
                                             backgroundColor: Colors.black,
                                             callback: (val) => setState(
                                                 () => tipoDeGrafico = val)),
+=======
+                                        Gavetinha(
+                                          "Visão",
+                                          ListaGavetinha().tipoDeGraficoLista,
+                                          textColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          callback: (val) => setState(
+                                              () => tipoDeGrafico = val),
+                                          callback2: (value) {
+                                            setState(() {
+                                              tipoDeGrafico2 = value;
+                                            });
+                                          },
+                                        ),
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
                                         Visibility(
                                           visible: (tipoDeGrafico == "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
+<<<<<<< HEAD
                                                     .indicadoresPriceLista, callback: (val) => setState(
                                                 () => tipoIndicador = val)),
                                                 
@@ -531,16 +512,50 @@ Future<void> loadData() async {
                                                 listaTicksEmpresa, callback: (val) => setState(
                                                 () => tipoEmpresa = val)),
                                           ]),
+=======
+                                                    .indicadoresPriceLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                              Gavetinha(
+                                                "Tipo",
+                                                ListaGavetinha()
+                                                    .acoesPriceLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
                                         ),
                                         Visibility(
                                           visible: (tipoDeGrafico != "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
+<<<<<<< HEAD
                                                     .indicadoresFundamentalistasLista, callback: (val) => setState(
                                                 () => tipoIndicadorFinanca = val))
                                           ]),
+=======
+                                                    .indicadoresFundamentalistasLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
                                         ),
                                       ],
                                     ),
@@ -564,8 +579,14 @@ Future<void> loadData() async {
                                             height: 500,
                                             // width: 100,
 
+<<<<<<< HEAD
                                             child:
                                                 GraficoLinear(widget.cardIndex, tipoDeGrafico, tipoIndicador, tipoEmpresa, tipoIndicadorFinanca),
+=======
+                                            child: GraficoLinear(
+                                                widget.cardIndex,
+                                                tipoDeGrafico2),
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
                                           ),
                                         ),
                                       ),
@@ -580,7 +601,6 @@ Future<void> loadData() async {
                     },
                   );
                 } else {
-
                   return Center(child: Text('Nenhum dado encontrado.'));
                 }
               },

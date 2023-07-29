@@ -885,6 +885,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
             ),
        ),
     );
+<<<<<<< HEAD
   }else {
     print(widget.patrimonio);
     return Scaffold(
@@ -1003,3 +1004,8 @@ class _GraficoLinearState extends State<GraficoLinear> {
   }
   
 }
+=======
+  }
+}
+
+>>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
