@@ -4,7 +4,8 @@ class ListaGavetinha {
   List<String> get tipoDeGraficoLista => <String>['Price', 'Finanças'];
 
   List<String> get indicadoresPriceLista =>
-      <String>['Média Móvel 14', 'RSI', 'Bollinger Bands'];
+      <String>['Média Móvel 14', 'Bollinger Bands', 'RSI', 'MACD'];
+    
   List<String> get acoesPriceLista => <String>['PETR3', 'PETR4'];
   List<String> get indicadoresFundamentalistasLista => <String>[
         'Dividendos',

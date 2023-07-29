@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'grafico_linear.dart';
 import './gavetinha.dart';
@@ -5,17 +7,21 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import '../menu_empresas/footer.dart';
 
+late String DataJson;
+
 class DetailsScreen extends StatefulWidget {
   final String cardIndex;
   final String color_company;
   final String PM;
   final String nome_company;
   final String sector;
+
+  
   // final Color textColor = Colors.black;
   const DetailsScreen(this.cardIndex, this.color_company, this.PM,
       this.nome_company, this.sector,
       {super.key});
-
+  
   @override
   State<DetailsScreen> createState() => DetailsScreenState();
 }
@@ -23,13 +29,21 @@ class DetailsScreen extends StatefulWidget {
 class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
-  String tipoDeGrafico = "Price";
-
+  String tipoDeGrafico = "Finanças";
+  String tipoIndicador = "Média Móvel 14";
+  String tipoIndicadorFinanca = 'Dividendos';
+  List<String> tipoDeGraficoLista = ['Finanças'];//['Price', 'Finanças'];
+  late String tipoEmpresa;
+  
+  late List<String> listaTicksEmpresa = [];
+  
   DetailsScreenState();
-
+  
   Widget _getStatusContainer(String colorCompany) {
+    
     Color backgroundColor;
     String status;
+   
     if (colorCompany == 'green') {
       backgroundColor = Colors.green;
       status = 'Desempenho Bom';
@@ -42,7 +56,7 @@ class DetailsScreenState extends State<DetailsScreen> {
     } else {
       return const SizedBox();
     }
-
+    
     return borderedContainer(
       status,
       color: backgroundColor,
@@ -50,9 +64,38 @@ class DetailsScreenState extends State<DetailsScreen> {
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
     );
   }
+   @override
+  void initState() {
+    super.initState();
+    loadData(); // Call the loadData function to populate the list
+  }
+Future<void> loadData() async {
+    if(tipoDeGrafico == 'Price'){
+    String Datajson = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+    
+    //print(jsonDecode(Datajson).runtimeType);
+    
+    List<dynamic> via = jsonDecode(Datajson);
+    for (int a = 0; a < via.length; a++){
+      
+      listaTicksEmpresa.add(widget.cardIndex+via[a]['codigo tick'].toString());
+    }
+    /*if(via[0]['codigo tick'].toString().isNull){
+      tipoDeGraficoLista = ['Finanças'];
+      tipoDeGrafico = "Finanças";
+    }
 
+    print('olha aqui ' + listaTicksEmpresa.toString());*/
+    tipoEmpresa = listaTicksEmpresa[0];
+    //print(via.length);
+    //print(via['tick']);
+    }
+    tipoEmpresa = "PEtr4";
+    setState(() {});
+   }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
@@ -92,7 +135,10 @@ class DetailsScreenState extends State<DetailsScreen> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
+                  
+                  
                   var view = jsonDecode(snapshot.data!);
+                  
                   String DY = view[0]['DY'];
                   String UBL = view[0]['UBL'];
                   String MAX = view[0]['MAX'];
@@ -466,7 +512,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     child: Row(
                                       children: [
                                         Gavetinha("TIPO DE GRÁFICO",
-                                            ListaGavetinha().tipoDeGraficoLista,
+                                            tipoDeGraficoLista,
                                             textColor: Colors.white,
                                             backgroundColor: Colors.black,
                                             callback: (val) => setState(
@@ -477,11 +523,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             Gavetinha(
                                                 "INDICADORES",
                                                 ListaGavetinha()
-                                                    .indicadoresPriceLista),
+                                                    .indicadoresPriceLista, callback: (val) => setState(
+                                                () => tipoIndicador = val)),
+                                                
                                             Gavetinha(
                                                 "AÇÃO",
-                                                ListaGavetinha()
-                                                    .acoesPriceLista),
+                                                listaTicksEmpresa, callback: (val) => setState(
+                                                () => tipoEmpresa = val)),
                                           ]),
                                         ),
                                         Visibility(
@@ -490,7 +538,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             Gavetinha(
                                                 "INDICADORES",
                                                 ListaGavetinha()
-                                                    .indicadoresFundamentalistasLista)
+                                                    .indicadoresFundamentalistasLista, callback: (val) => setState(
+                                                () => tipoIndicadorFinanca = val))
                                           ]),
                                         ),
                                       ],
@@ -516,8 +565,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             // width: 100,
 
                                             child:
-                                                GraficoLinear(widget.cardIndex),
-
+                                                GraficoLinear(widget.cardIndex, tipoDeGrafico, tipoIndicador, tipoEmpresa, tipoIndicadorFinanca),
                                           ),
                                         ),
                                       ),
