@@ -412,6 +412,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     child: _getStatusContainer(
                                         widget.color_company),
                                   ),
+                                  //Reservado para anuncios
+                                  Container()
                                 ],
                               ),
                             ),
