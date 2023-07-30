@@ -16,12 +16,11 @@ class DetailsScreen extends StatefulWidget {
   final String nome_company;
   final String sector;
 
-  
   // final Color textColor = Colors.black;
   const DetailsScreen(this.cardIndex, this.color_company, this.PM,
       this.nome_company, this.sector,
       {super.key});
-  
+
   @override
   State<DetailsScreen> createState() => DetailsScreenState();
 }
@@ -30,25 +29,19 @@ class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
   String tipoDeGrafico = "Finanças";
-<<<<<<< HEAD
   String tipoIndicador = "Média Móvel 14";
   String tipoIndicadorFinanca = 'Dividendos';
-  List<String> tipoDeGraficoLista = ['Finanças'];//['Price', 'Finanças'];
+  List<String> tipoDeGraficoLista = ['Finanças']; //['Price', 'Finanças'];
   late String tipoEmpresa;
-  
-  late List<String> listaTicksEmpresa = [];
-  
-=======
-  String tipoDeGrafico2 = "Patrimônio Líquido";
 
->>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
+  late List<String> listaTicksEmpresa = [];
+
   DetailsScreenState();
-  
+
   Widget _getStatusContainer(String colorCompany) {
-    
     Color backgroundColor;
     String status;
-   
+
     if (colorCompany == 'green') {
       backgroundColor = Colors.green;
       status = 'Desempenho Bom';
@@ -61,7 +54,7 @@ class DetailsScreenState extends State<DetailsScreen> {
     } else {
       return const SizedBox();
     }
-    
+
     return borderedContainer(
       status,
       color: backgroundColor,
@@ -69,38 +62,41 @@ class DetailsScreenState extends State<DetailsScreen> {
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
     );
   }
-   @override
+
+  @override
   void initState() {
     super.initState();
     loadData(); // Call the loadData function to populate the list
   }
-Future<void> loadData() async {
-    if(tipoDeGrafico == 'Price'){
-    String Datajson = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
-    
-    //print(jsonDecode(Datajson).runtimeType);
-    
-    List<dynamic> via = jsonDecode(Datajson);
-    for (int a = 0; a < via.length; a++){
-      
-      listaTicksEmpresa.add(widget.cardIndex+via[a]['codigo tick'].toString());
-    }
-    /*if(via[0]['codigo tick'].toString().isNull){
+
+  Future<void> loadData() async {
+    if (tipoDeGrafico == 'Price') {
+      String Datajson = await rootBundle
+          .loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+
+      //print(jsonDecode(Datajson).runtimeType);
+
+      List<dynamic> via = jsonDecode(Datajson);
+      for (int a = 0; a < via.length; a++) {
+        listaTicksEmpresa
+            .add(widget.cardIndex + via[a]['codigo tick'].toString());
+      }
+      /*if(via[0]['codigo tick'].toString().isNull){
       tipoDeGraficoLista = ['Finanças'];
       tipoDeGrafico = "Finanças";
     }
 
     print('olha aqui ' + listaTicksEmpresa.toString());*/
-    tipoEmpresa = listaTicksEmpresa[0];
-    //print(via.length);
-    //print(via['tick']);
+      tipoEmpresa = listaTicksEmpresa[0];
+      //print(via.length);
+      //print(via['tick']);
     }
     tipoEmpresa = "PEtr4";
     setState(() {});
-   }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
@@ -137,10 +133,8 @@ Future<void> loadData() async {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
-                  
-                  
                   var view = jsonDecode(snapshot.data!);
-                  
+
                   String DY = view[0]['DY'];
                   String UBL = view[0]['UBL'];
                   String MAX = view[0]['MAX'];
@@ -476,88 +470,37 @@ Future<void> loadData() async {
                                         20, 0, 20, 20),
                                     child: Row(
                                       children: [
-<<<<<<< HEAD
                                         Gavetinha("TIPO DE GRÁFICO",
                                             tipoDeGraficoLista,
                                             textColor: Colors.white,
                                             backgroundColor: Colors.black,
                                             callback: (val) => setState(
                                                 () => tipoDeGrafico = val)),
-=======
-                                        Gavetinha(
-                                          "Visão",
-                                          ListaGavetinha().tipoDeGraficoLista,
-                                          textColor: Colors.white,
-                                          backgroundColor: Colors.black,
-                                          callback: (val) => setState(
-                                              () => tipoDeGrafico = val),
-                                          callback2: (value) {
-                                            setState(() {
-                                              tipoDeGrafico2 = value;
-                                            });
-                                          },
-                                        ),
->>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
                                         Visibility(
                                           visible: (tipoDeGrafico == "Price"),
-                                          child: Row(
-                                            children: [
-                                              Gavetinha(
+                                          child: Row(children: [
+                                            Gavetinha(
                                                 "Indicadores",
                                                 ListaGavetinha()
-<<<<<<< HEAD
-                                                    .indicadoresPriceLista, callback: (val) => setState(
-                                                () => tipoIndicador = val)),
-                                                
-                                            Gavetinha(
-                                                "AÇÃO",
-                                                listaTicksEmpresa, callback: (val) => setState(
-                                                () => tipoEmpresa = val)),
-                                          ]),
-=======
                                                     .indicadoresPriceLista,
-                                                callback2: (value) {
-                                                  setState(() {
-                                                    tipoDeGrafico2 = value;
-                                                  });
-                                                },
-                                              ),
-                                              Gavetinha(
-                                                "Tipo",
-                                                ListaGavetinha()
-                                                    .acoesPriceLista,
-                                                callback2: (value) {
-                                                  setState(() {
-                                                    tipoDeGrafico2 = value;
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
->>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
+                                                callback: (val) => setState(
+                                                    () => tipoIndicador = val)),
+                                            Gavetinha("AÇÃO", listaTicksEmpresa,
+                                                callback: (val) => setState(
+                                                    () => tipoEmpresa = val)),
+                                          ]),
                                         ),
                                         Visibility(
                                           visible: (tipoDeGrafico != "Price"),
-                                          child: Row(
-                                            children: [
-                                              Gavetinha(
+                                          child: Row(children: [
+                                            Gavetinha(
                                                 "Indicadores",
                                                 ListaGavetinha()
-<<<<<<< HEAD
-                                                    .indicadoresFundamentalistasLista, callback: (val) => setState(
-                                                () => tipoIndicadorFinanca = val))
-                                          ]),
-=======
                                                     .indicadoresFundamentalistasLista,
-                                                callback2: (value) {
-                                                  setState(() {
-                                                    tipoDeGrafico2 = value;
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
->>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
+                                                callback: (val) => setState(
+                                                    () => tipoIndicadorFinanca =
+                                                        val))
+                                          ]),
                                         ),
                                       ],
                                     ),
@@ -574,21 +517,19 @@ Future<void> loadData() async {
                                               const EdgeInsets.only(right: 10),
                                           padding: const EdgeInsets.all(15),
                                           decoration: BoxDecoration(
-                                           /*border: Border.all(
+                                              /*border: Border.all(
                                                 color: Colors.black87),*/
-                                          ),
+                                              ),
                                           child: SizedBox(
                                             height: 500,
                                             // width: 100,
 
-<<<<<<< HEAD
-                                            child:
-                                                GraficoLinear(widget.cardIndex, tipoDeGrafico, tipoIndicador, tipoEmpresa, tipoIndicadorFinanca),
-=======
                                             child: GraficoLinear(
                                                 widget.cardIndex,
-                                                tipoDeGrafico2),
->>>>>>> c7b39030f3a4af673d6b5652251b8d178c515ff3
+                                                tipoDeGrafico,
+                                                tipoIndicador,
+                                                tipoEmpresa,
+                                                tipoIndicadorFinanca),
                                           ),
                                         ),
                                       ),

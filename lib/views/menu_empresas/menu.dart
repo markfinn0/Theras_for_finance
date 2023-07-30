@@ -128,11 +128,10 @@ class _MenuContainerState extends State<MenuContainer> {
                             child: Stack(
                               children: [
                                 Positioned(
-                                  top: 15,
-                                  left: 0,
-                                  right: 200,
+                                  top: 5,
+                                  left: 5,
                                   child: Container(
-                                    height: 75,
+                                    height: 70,
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
@@ -146,9 +145,8 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 65,
+                                  top: 50,
                                   left: 5,
-                                  right: 200,
                                   child: Container(
                                     height: 60,
                                     child: Align(
@@ -198,7 +196,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 60,
+                                  top: 45,
                                   right: 5,
                                   child: Container(
                                     height: 30,
@@ -215,8 +213,7 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 82,
-                                  left: 200,
+                                  top: 60,
                                   right: 5,
                                   child: Container(
                                     height: 30,
@@ -233,36 +230,31 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 25,
-                                  right: 145,
+                                  right: 120,
                                   child: Container(
-                                    height: 60,
-                                    child: (() {
-                                      if (symbol_status == 'up') {
-                                        return Icon(
-                                          Icons.trending_up,
-                                        );
-                                      } else if (symbol_status == 'down') {
-                                        return Icon(
-                                          Icons.trending_down,
-                                        );
-                                      } else if (symbol_status == 'side') {
-                                        return Icon(
-                                          Icons.trending_flat,
-                                        );
-                                      } else {
-                                        return SizedBox();
-                                      }
-                                    })(),
+                                    alignment: Alignment.center,
+                                    width: 90,
+                                    height: 30,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Previsão",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Positioned(
                                   top: 20,
-                                  right: 135,
+                                  right: 120,
                                   child: Container(
+                                    alignment: Alignment.center,
+                                    width: 90,
                                     height: 30,
                                     child: Align(
-                                      alignment: Alignment.center,
                                       child: (() {
                                         if (symbol_status == 'up') {
                                           return Text(
@@ -299,20 +291,29 @@ class _MenuContainerState extends State<MenuContainer> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 5,
-                                  right: 140,
+                                  top: 25,
+                                  right: 120,
                                   child: Container(
-                                    height: 20,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Previsão",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
+                                    alignment: Alignment.center,
+                                    width: 90,
+                                    height: 60,
+                                    child: (() {
+                                      if (symbol_status == 'up') {
+                                        return Icon(
+                                          Icons.trending_up,
+                                        );
+                                      } else if (symbol_status == 'down') {
+                                        return Icon(
+                                          Icons.trending_down,
+                                        );
+                                      } else if (symbol_status == 'side') {
+                                        return Icon(
+                                          Icons.trending_flat,
+                                        );
+                                      } else {
+                                        return SizedBox();
+                                      }
+                                    })(),
                                   ),
                                 ),
                                 Positioned(
@@ -366,23 +367,6 @@ class _MenuContainerState extends State<MenuContainer> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 65,
-                                  right: 130,
-                                  child: Container(
-                                    height: 20,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "14 Semanas",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 10,
                                         ),
                                       ),
                                     ),
