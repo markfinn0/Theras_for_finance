@@ -4,17 +4,17 @@ class ListaGavetinha {
   List<String> get tipoDeGraficoLista => <String>['Finanças', 'Price'];
 
   List<String> get indicadoresPriceLista =>
-      <String>['Média Móvel 14', 'Bollinger Bands', 'RSI', 'MACD'];
-    
+      <String>['Média Móvel 14', 'RSI', 'Bollinger Bands'];
   List<String> get acoesPriceLista => <String>['PETR3', 'PETR4'];
   List<String> get indicadoresFundamentalistasLista => <String>[
-       'Dividendos', 'Patrimônio Líquido',
+        'Patrimônio Líquido',
         'Contas a Receber',
         'Passivo Total',
         'Despesas Trabalhistas',
         'Receita Líquida',
         'Reservas de Lucro',
-        'Lucro Líquido'
+        'Lucro Líquido',
+        'Dividendos'
       ];
 }
 
