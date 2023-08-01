@@ -24,7 +24,10 @@ class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
   String tipoDeGrafico = "Finanças";
+  late List<String> listaTicksEmpresa = [];
   String tipoDeGrafico2 = "Patrimônio Líquido";
+   
+  late int tipoEmpresa;
 
   DetailsScreenState();
 
@@ -51,7 +54,32 @@ class DetailsScreenState extends State<DetailsScreen> {
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
     );
   }
+    @override
+  void initState() {
+    super.initState();
+    loadData(); // Call the loadData function to populate the list
+  }
+Future<void> loadData() async {
+  try {
+    String Datajson = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+    
+    
+    List<dynamic> via = jsonDecode(Datajson);
+    for (int a = 0; a < via.length; a++){
+      listaTicksEmpresa.insert(a, widget.cardIndex+via[a]['codigo tick'].toString());
+    }
+    
+    tipoEmpresa = 0;
 
+    setState(() {});
+
+  } catch (e) {
+    print('erro: $e');
+    listaTicksEmpresa.add('Not Found');
+    tipoEmpresa = 0;
+  }
+    
+   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -448,16 +476,19 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                 callback2: (value) {
                                                   setState(() {
                                                     tipoDeGrafico2 = value;
+                                                    //print('na main' + value);
                                                   });
                                                 },
                                               ),
                                               Gavetinha(
-                                                "Tipo",
-                                                ListaGavetinha()
-                                                    .acoesPriceLista,
+                                                "Tipo"
+                                                  ,listaTicksEmpresa ,
                                                 callback2: (value) {
                                                   setState(() {
-                                                    tipoDeGrafico2 = value;
+
+                                                    tipoEmpresa = listaTicksEmpresa.indexOf(value);
+                                                    //tipoEmpresa = value;
+                                  
                                                   });
                                                 },
                                               ),
@@ -505,7 +536,7 @@ class DetailsScreenState extends State<DetailsScreen> {
 
                                             child: GraficoLinear(
                                                 widget.cardIndex,
-                                                tipoDeGrafico2),
+                                                tipoDeGrafico2, tipoDeGrafico, tipoEmpresa),
                                           ),
                                         ),
                                       ),
