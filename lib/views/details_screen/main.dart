@@ -26,7 +26,7 @@ class DetailsScreenState extends State<DetailsScreen> {
   String tipoDeGrafico = "Finanças";
   late List<String> listaTicksEmpresa = [];
   String tipoDeGrafico2 = "Patrimônio Líquido";
-   
+
   late int tipoEmpresa;
 
   DetailsScreenState();
@@ -54,44 +54,40 @@ class DetailsScreenState extends State<DetailsScreen> {
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
     );
   }
-    @override
+
+  @override
   void initState() {
     super.initState();
     loadData(); // Call the loadData function to populate the list
   }
-Future<void> loadData() async {
-  try {
-    String Datajson = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
-    
-    
-    List<dynamic> via = jsonDecode(Datajson);
-    for (int a = 0; a < via.length; a++){
-      listaTicksEmpresa.insert(a, widget.cardIndex+via[a]['codigo tick'].toString());
+
+  Future<void> loadData() async {
+    try {
+      String Datajson = await rootBundle
+          .loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+
+      List<dynamic> via = jsonDecode(Datajson);
+      for (int a = 0; a < via.length; a++) {
+        listaTicksEmpresa.insert(
+            a, widget.cardIndex + via[a]['codigo tick'].toString());
+      }
+
+      tipoEmpresa = 0;
+
+      setState(() {});
+    } catch (e) {
+      print('erro: $e');
+      listaTicksEmpresa.add('Not Found');
+      tipoEmpresa = 0;
     }
-    
-    tipoEmpresa = 0;
-
-    setState(() {});
-
-  } catch (e) {
-    print('erro: $e');
-    listaTicksEmpresa.add('Not Found');
-    tipoEmpresa = 0;
   }
-    
-   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.report),
-              onPressed: () {},
-            ),
-          ],
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -200,7 +196,7 @@ Future<void> loadData() async {
                                             height:
                                                 80, // Defina o tamanho desejado da altura da imagem
                                             child: Image.asset(
-                                              'image/company_imagens/' +
+                                              'company_imagens/' +
                                                   widget.cardIndex +
                                                   '.png',
                                               fit: BoxFit.contain,
@@ -481,14 +477,14 @@ Future<void> loadData() async {
                                                 },
                                               ),
                                               Gavetinha(
-                                                "Tipo"
-                                                  ,listaTicksEmpresa ,
+                                                "Tipo",
+                                                listaTicksEmpresa,
                                                 callback2: (value) {
                                                   setState(() {
-
-                                                    tipoEmpresa = listaTicksEmpresa.indexOf(value);
+                                                    tipoEmpresa =
+                                                        listaTicksEmpresa
+                                                            .indexOf(value);
                                                     //tipoEmpresa = value;
-                                  
                                                   });
                                                 },
                                               ),
@@ -536,7 +532,9 @@ Future<void> loadData() async {
 
                                             child: GraficoLinear(
                                                 widget.cardIndex,
-                                                tipoDeGrafico2, tipoDeGrafico, tipoEmpresa),
+                                                tipoDeGrafico2,
+                                                tipoDeGrafico,
+                                                tipoEmpresa),
                                           ),
                                         ),
                                       ),
