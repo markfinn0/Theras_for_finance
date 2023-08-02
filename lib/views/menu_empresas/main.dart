@@ -18,12 +18,7 @@ class _MenuEmpresasState extends State<MenuEmpresas> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.report),
-            onPressed: () {},
-          ),
-        ],
+        actions: [],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
