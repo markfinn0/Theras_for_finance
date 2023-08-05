@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons:
   syncfusion_flutter_charts:
   flutter_js: ^0.8.0
+  fl_chart: ^0.63.0
 
 
   
