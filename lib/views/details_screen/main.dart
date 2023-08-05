@@ -23,7 +23,11 @@ class DetailsScreen extends StatefulWidget {
 class DetailsScreenState extends State<DetailsScreen> {
   final double breakpoint = 800;
   final int paneProportion = 50;
-  String tipoDeGrafico = "Price";
+  String tipoDeGrafico = "Finanças";
+  late List<String> listaTicksEmpresa = [];
+  String tipoDeGrafico2 = "Patrimônio Líquido";
+
+  late int tipoEmpresa;
 
   DetailsScreenState();
 
@@ -52,17 +56,38 @@ class DetailsScreenState extends State<DetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    loadData(); // Call the loadData function to populate the list
+  }
+
+  Future<void> loadData() async {
+    try {
+      String Datajson = await rootBundle
+          .loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
+
+      List<dynamic> via = jsonDecode(Datajson);
+      for (int a = 0; a < via.length; a++) {
+        listaTicksEmpresa.insert(
+            a, widget.cardIndex + via[a]['codigo tick'].toString());
+      }
+
+      tipoEmpresa = 0;
+
+      setState(() {});
+    } catch (e) {
+      print('erro: $e');
+      listaTicksEmpresa.add('Not Found');
+      tipoEmpresa = 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.report),
-              onPressed: () {},
-            ),
-          ],
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -171,11 +196,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                                             height:
                                                 80, // Defina o tamanho desejado da altura da imagem
                                             child: Image.asset(
-                                              'image/company_imagens/' +
+                                              'company_imagens/' +
                                                   widget.cardIndex +
                                                   '.png',
-                                              fit: BoxFit
-                                                  .contain, // Ajuste a forma como a imagem é ajustada dentro do Container
+                                              fit: BoxFit.contain,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                // Este bloco é executado quando a imagem não pôde ser carregada
+                                                // Exiba uma imagem de substituição ou um ícone para indicar que a imagem não está disponível
+                                                return Icon(
+                                                  Icons.error_outline,
+                                                  size: 48,
+                                                  color: Colors.red,
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -414,33 +448,65 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         20, 0, 20, 20),
                                     child: Row(
                                       children: [
-                                        Gavetinha("TIPO DE GRÁFICO",
-                                            ListaGavetinha().tipoDeGraficoLista,
-                                            textColor: Colors.white,
-                                            backgroundColor: Colors.black,
-                                            callback: (val) => setState(
-                                                () => tipoDeGrafico = val)),
+                                        Gavetinha(
+                                          "Visão",
+                                          ListaGavetinha().tipoDeGraficoLista,
+                                          textColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          callback: (val) => setState(
+                                              () => tipoDeGrafico = val),
+                                          callback2: (value) {
+                                            setState(() {
+                                              tipoDeGrafico2 = value;
+                                            });
+                                          },
+                                        ),
                                         Visibility(
                                           visible: (tipoDeGrafico == "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
-                                                    .indicadoresPriceLista),
-                                            Gavetinha(
-                                                "AÇÃO",
-                                                ListaGavetinha()
-                                                    .acoesPriceLista),
-                                          ]),
+                                                    .indicadoresPriceLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                    //print('na main' + value);
+                                                  });
+                                                },
+                                              ),
+                                              Gavetinha(
+                                                "Tipo",
+                                                listaTicksEmpresa,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoEmpresa =
+                                                        listaTicksEmpresa
+                                                            .indexOf(value);
+                                                    //tipoEmpresa = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Visibility(
                                           visible: (tipoDeGrafico != "Price"),
-                                          child: Row(children: [
-                                            Gavetinha(
-                                                "INDICADORES",
+                                          child: Row(
+                                            children: [
+                                              Gavetinha(
+                                                "Indicadores",
                                                 ListaGavetinha()
-                                                    .indicadoresFundamentalistasLista)
-                                          ]),
+                                                    .indicadoresFundamentalistasLista,
+                                                callback2: (value) {
+                                                  setState(() {
+                                                    tipoDeGrafico2 = value;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -463,8 +529,12 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           child: SizedBox(
                                             height: 500,
                                             // width: 100,
-                                            child:
-                                                GraficoLinear(widget.cardIndex),
+
+                                            child: GraficoLinear(
+                                                widget.cardIndex,
+                                                tipoDeGrafico2,
+                                                tipoDeGrafico,
+                                                tipoEmpresa),
                                           ),
                                         ),
                                       ),

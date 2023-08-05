@@ -1,316 +1,922 @@
 import 'dart:convert';
-
+import 'package:tuple/tuple.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
-List<FlSpot> chartData1 = [];
-List<FlSpot> chartData_media_movel = [];
-List<FlSpot> chartData_sup_boll= [];
-List<FlSpot> chartData_inf_boll= [];
-late String jsonData;
-late String jsonData1;
-late String jsonData2;
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
+class JsonLoader {
+  static Future<List<dynamic>> loadJsonData(String fileName) async {
+    try {
+      String jsonData = await rootBundle.loadString(fileName);
+      return jsonDecode(jsonData);
+    } catch (e) {
+      throw Exception('Erro ao carregar o arquivo JSON: $e');
+    }
+  }
+}
 
 class GraficoLinear extends StatefulWidget {
   final String cardIndex;
+  late String indicator;
+  late String tipoGrafico;
+  late int tickEmpresa;
+  GraficoLinear(this.cardIndex, this.indicator, this.tipoGrafico, this.tickEmpresa, {Key? key}) : super(key: key);
 
-  GraficoLinear(this.cardIndex, {Key? key}) : super(key: key);
-  
   @override
   _GraficoLinearState createState() => _GraficoLinearState();
 }
 
+class Pair<T1, T2> {
+  final T1 a;
+  final T2 b;
+
+  Pair(this.a, this.b);
+}
+
 class _GraficoLinearState extends State<GraficoLinear> {
-  
-  //List<dynamic> view = [];
-  //List<dynamic> view2 = [];
-  
-  var inicio;
-  Map<String, dynamic> ?view;
-  late Map<String, dynamic> view2;
-  late Map<String, dynamic> view3;
-  double ?quant;
-  double ?menorValor;
-  double ?maiorValor;
-  List <dynamic> predicaoValor = [];
-  List<FlSpot> chartData = [];
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 9,
-    );
-    Widget text;
-    String texto = view?['Data'][value.toString()];
-    text = Text(texto, style: style);
+  List<String> Real_X = [];
+  List<FlSpot> Real_Y = [];
 
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      angle: -90,
+  
+  
 
-      space: 10,
-      child: text,
+  List<Tuple3<int, String, double>> chartData = [];
+  List<Tuple3<int, String, double>> chartData_pred = [];
+
+  List<Tuple2<String, double>> chartDataCotacoes= [];
+  List<Tuple2<String, double>> chartDataCotacoes_pred = [];
+  
+List<Tuple2<String, double>> chartDataMediaMovel = [];
+List<Tuple2<String, double>> chartDataMediaMovel_pred = [];
+
+List<Tuple2<String, double>> chartDataRSI = [];
+List<Tuple2<String, double>> chartDataRSI_pred = [];
+
+List<Tuple2<String, double>> chartDataBandaSupBoll= [];
+List<Tuple2<String, double>> chartDataBandaSupBoll_pred= [];
+
+List<Tuple2<String, double>> chartDataBandaInfBoll = [];
+List<Tuple2<String, double>> chartDataBandaInfBoll_pred= [];
+
+List<Tuple2<String, double>> chartDataMACD= [];
+List<Tuple2<String, double>> chartDataMACD_pred= [];
+
+  List<Tuple3<int, String, double>>? lastTuplePred = [];
+  
+  double? menorValor;
+  double? maiorValor;
+  String? name1;
+  String? name2;
+  late String name3;
+  late String name4;
+  late String name5;
+  late String name6;
+  
+  bool dataLoaded = false;
+  
+  bool hasError = false;
+  late ZoomPanBehavior _zoomPanBehavior;
+  late TooltipBehavior _tooltipBehavior;
+  @override
+  Future<void> _carregarDados() async {
+    try {
       
-    );
+      late List<dynamic> dataList;
+
+      late List<dynamic> dataLista;
+      late List<dynamic> dataLista1;
+      late List<dynamic> dataLista2;
+      late List<dynamic> dataLista3;
+      
+      switch (widget.indicator) {
+        
+        case 'Patrimônio Líquido':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Patrimônio_Líquido.json',
+          );
+
+          name1 = "PL";
+          name2 = "PL Predição";
+
+          break;
+
+        case 'Lucro Líquido':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Lucro_Prejuízo_do_Período.json',
+          );
+          name1 = 'Lucro Líquido';
+          name2 = "Lucro Líquido Predição";
+          break;
+        case 'Dividendos':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_dividends.json',
+          );
+          name1 = 'Dividendos';
+          name2 = "Dividendos Predição";
+          break;
+        case 'Receita Líquida':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Receita.json',
+          );
+          name1 = 'Receita Líquida';
+          name2 = "Receita Líquida Predição";
+          break;
+        case 'Despesas Trabalhistas':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Obrigações_Sociais_e_Trabalhistas.json',
+          );
+          name1 = 'Despesas Trabalhistas';
+          name2 = 'Despesas Trabalhistas Predição';
+          break;
+        case 'Passivo Total':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Passivo_Total.json',
+          );
+          name1 = 'Passivo Total';
+          name2 = 'Passivo Total Predição';
+          break;
+        case 'Contas a Receber':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Contas_a_Receber.json',
+          );
+          name1 = 'Contas a Receber';
+          name2 = 'Contas a Receber Predição';
+          break;
+        case 'Reservas de Lucro':
+          dataList = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_Reservas_de_Lucro.json',
+          );
+          name1 = 'Reservas de Lucro';
+          name2 = 'Reservas de Lucro Predição';
+          break;
+
+        case 'Média Móvel 14':
+        
+        
+          dataLista = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes.json',
+          );
+          dataLista1 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes_predicao.json',
+          );
+          dataLista2 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_media_movel.json',
+          );
+          dataLista3 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_media_movel_predicao.json',
+          );
+          
+          
+          name1 = 'Cotações';
+          name2 = 'Cotações Predição';
+          name3 = 'Média Móvel';
+          name4 = 'Média Móvel Predição';
+          //name2 = 'Reservas de Lucro Predição';
+          break;
+        case "RSI":
+        
+        
+          dataLista = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes.json',
+          );
+          dataLista1 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes_predicao.json',
+          );
+          dataLista2 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_rsi.json',
+          );
+          dataLista3 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_rsi_predicao.json',
+          );
+          name1 = 'Indice de Força Relativa';
+          name2 = 'Indice de Força Relativa Predição';
+        break;
+        case "Bollinger Bands":
+       
+          dataLista = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes.json',
+          );
+          dataLista1 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes_predicao.json',
+          );
+          dataLista2 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_bandas_boll.json',
+          );
+          dataLista3 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_bandas_boll_predicao.json',
+          );
+          name1 = 'Cotações';
+          name2 = 'Cotações Predição';
+          name3 = 'Banda Inf Bollinger';
+          name4 = 'Banda Inf Bollinger Pred.';
+          name5 = 'Banda Sup. Bollinger';
+          name6 = 'Banda Sup. Bollinger Pred.';
+
+          
+
+        break;
+        case "MACD":
+          dataLista = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes.json',
+          );
+          dataLista1 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_cotacoes_predicao.json',
+          );
+          dataLista2 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_macd.json',
+          );
+          dataLista3 = await JsonLoader.loadJsonData(
+            'asset/Empresas_data/${widget.cardIndex}_macd_predicao.json',
+          );
+          name1 = 'Média Móvel Convergente e Divergente';
+          name2 = 'Média Móvel Convergente e Divergente Pred.';
+        break;
+
+
+        default:
+          dataLista = [];
+          dataList = [];
+          dataLista1 = [];
+          dataLista2 = [];
+          dataLista3 = [];
+
+      }
+      // carregar dados de finanças
+      if (widget.tipoGrafico == 'Finanças'){
+
+        chartData = dataList.where((data) => data['info'] == 'real').map((data) {
+          int index = data['index'];
+          String label = data['data'];
+          double valor = data['valor'];
+          DateTime parsedDate = DateTime.parse(label);
+          String formattedDate = DateFormat('MMM-yy').format(parsedDate);
+          return Tuple3(index, formattedDate, valor);
+        }).toList();
+
+        chartData_pred =
+          dataList.where((data) => data['info'] == 'prev').map((data) {
+          int index = data['index'];
+          String label = data['data'];
+          double valor = data['valor'];
+          DateTime parsedDate = DateTime.parse(label);
+
+          String formattedDate = DateFormat('MMM-yy').format(parsedDate);
+          return Tuple3(index, formattedDate, valor);
+        }).toList();
+
+      //Aqui ele arruma aquele buraquinho no gráfico
+        chartData.add(chartData_pred.first);
+      }
+      else{ //carregar dados de price
+          
+          //if(widget.indicator == "Média Móvel 14" || widget.indicator == "Bollinger Bands"){
+             //pegando os dados de cotacao  
+          int a = 0;
+          //print((dataLista[widget.tickEmpresa]['Close'].length));
+          for (a; a < (dataLista[widget.tickEmpresa]['Close'].length); a++) {
+          String label = dataLista[widget.tickEmpresa]['Data'][a.toString()];
+          DateTime parsedDate = DateTime.parse(label);
+          String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+            chartDataCotacoes.insert(a, Tuple2(formattedDate,dataLista[widget.tickEmpresa]['Close'][a.toString()]));
+          }
+          
+          //pegando os dados de predicao  de cotacao
+          int contador = 0;
+          
+          int tamanho_elementos = a + 13;
+          
+          for (a; a < tamanho_elementos; a++) {
+          
+          String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+          
+          DateTime parsedDate = DateTime.parse(label);
+          String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+
+            if(contador == 0){
+              String label1 = dataLista[widget.tickEmpresa]['Data'][(a-1).toString()];
+                
+              DateTime parsedDate1 = DateTime.parse(label1);
+              String formattedDate1 = DateFormat('dd/MM/yyyy').format(parsedDate1);
+              chartDataCotacoes_pred.insert(contador, Tuple2(formattedDate1,dataLista[widget.tickEmpresa]['Close'][(a-1).toString()]));
+              //print(dataLista[widget.tickEmpresa]['Close'][(a-1).toString()]);
+              
+            }
+            contador++;
+            chartDataCotacoes_pred.insert(contador, Tuple2(formattedDate,dataLista1[widget.tickEmpresa]['resultado'][a.toString()]));
+            
+            
+          
+          }    
+          
+          //}
+          
+          switch(widget.indicator){
+            case "Média Móvel 14":
+            
+              int contador = 0;
+              int a = 14;
+              int quantidade_elementos = (dataLista2[widget.tickEmpresa]['media movel'].length)+a;
+
+              
+              for (a; a < quantidade_elementos; a++) {
+                String label = dataLista[widget.tickEmpresa]['Data'][a.toString()];
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                
+                chartDataMediaMovel.insert(contador, Tuple2(formattedDate,dataLista2[widget.tickEmpresa]['media movel'][a.toString()]));
+                contador++;
+              }
+
+              quantidade_elementos = quantidade_elementos + 14;
+              int contador_pred = 0;
+              //print(quantidade_elementos);
+              //print(a);
+             
+             for (a; a < quantidade_elementos; a++) {
+                //print(a);
+                String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+
+                if(contador_pred == 0){
+                  
+                  chartDataMediaMovel_pred.insert(contador_pred, chartDataMediaMovel[a-15]);
+                }
+
+                contador_pred++;
+                
+                chartDataMediaMovel_pred.insert(contador_pred, Tuple2(formattedDate,dataLista3[widget.tickEmpresa]['media movel'][a.toString()]));
+                
+                
+              }
+
+
+          
+            break;
+            case "RSI":
+          
+              int contador = 0;
+              int a = 14;
+              int quantidade_elementos = (dataLista2[widget.tickEmpresa]['Ind-forc-relat'].length)+a;
+
+              
+              for (a; a < quantidade_elementos; a++) {
+                String label = dataLista[widget.tickEmpresa]['Data'][a.toString()];
+                
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                
+                chartDataRSI.insert(contador, Tuple2(formattedDate, dataLista2[widget.tickEmpresa]['Ind-forc-relat'][a.toString()]));
+                contador++;
+              }
+              quantidade_elementos = quantidade_elementos + 14;
+              int contador_pred = 0;
+              //print(quantidade_elementos);
+              //print(a);
+             
+             for (a; a < quantidade_elementos; a++) {
+                //print(a);
+                String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+                
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                //print(dataLista[widget.tickEmpresa]['Data'][(a-1).toString()]);
+                //print(dataLista2[widget.tickEmpresa]['Ind-forc-relat'][(a-1).toString()]);
+                if(contador_pred == 0){
+                  String label1 = dataLista[widget.tickEmpresa]['Data'][(a-1).toString()];
+                
+                  DateTime parsedDate1 = DateTime.parse(label1);
+                  String formattedDate1 = DateFormat('dd/MM/yyyy').format(parsedDate1);
+                  chartDataRSI_pred.insert(contador_pred, Tuple2(formattedDate1,dataLista2[widget.tickEmpresa]['Ind-forc-relat'][(a-1).toString()]));
+                }
+
+                contador_pred++;
+                //print(dataLista3);
+                chartDataRSI_pred.insert(contador_pred, Tuple2(formattedDate,dataLista3[widget.tickEmpresa]['Ind-forc-relat'][a.toString()]));  
+                
+              }
+            break;
+            case "Bollinger Bands":
+            //carregando dados da banda inferior
+              int contador = 0;
+              int a = 14;
+              int quantidade_elementos = (dataLista2[widget.tickEmpresa]['banda inf boll'].length)+a;
+
+              
+              for (a; a < quantidade_elementos; a++) {
+                String label = dataLista[widget.tickEmpresa]['Data'][a.toString()]; //default data
+                
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                
+                chartDataBandaInfBoll.insert(contador, Tuple2(formattedDate, dataLista2[widget.tickEmpresa]['banda inf boll'][a.toString()]));
+                contador++;
+              }
+              //carregando dados da banda inferior predicao
+              quantidade_elementos = quantidade_elementos + 14;
+              int contador_pred = 0;
+              
+             
+             for (a; a < quantidade_elementos; a++) {
+                //print(a);
+                String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+
+                if(contador_pred == 0){
+                  String label1 = dataLista[widget.tickEmpresa]['Data'][(a-1).toString()];
+                
+                  DateTime parsedDate1 = DateTime.parse(label1);
+                  String formattedDate1 = DateFormat('dd/MM/yyyy').format(parsedDate1);
+                  chartDataBandaInfBoll_pred.insert(contador_pred, Tuple2(formattedDate1,dataLista2[widget.tickEmpresa]['banda inf boll'][(a-1).toString()]));
+                }
+
+                contador_pred++;
+                
+                chartDataBandaInfBoll_pred.insert(contador_pred, Tuple2( formattedDate,dataLista3[widget.tickEmpresa]['banda inf boll'][a.toString()]));     
+                  
+              }
+
+
+              //carregando dados da banda superior
+              contador = 0;
+              a = 14;
+              quantidade_elementos = (dataLista2[widget.tickEmpresa]['banda sup boll'].length)+a;
+
+              
+              for (a; a < quantidade_elementos; a++) {
+                String label = dataLista[widget.tickEmpresa]['Data'][a.toString()]; //default data
+                
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                
+                chartDataBandaSupBoll.insert(contador, Tuple2(formattedDate, dataLista2[widget.tickEmpresa]['banda sup boll'][a.toString()]));
+                contador++;
+              }
+              //carregando dados da banda superior predicao
+              quantidade_elementos = quantidade_elementos + 14;
+              contador_pred = 0;
+              
+             
+             for (a; a < quantidade_elementos; a++) {
+                //print(a);
+                String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+
+                if(contador_pred == 0){
+                  String label1 = dataLista[widget.tickEmpresa]['Data'][(a-1).toString()];
+                
+                  DateTime parsedDate1 = DateTime.parse(label1);
+                  String formattedDate1 = DateFormat('dd/MM/yyyy').format(parsedDate1);
+                  chartDataBandaSupBoll_pred.insert(contador_pred, Tuple2(formattedDate1,dataLista2[widget.tickEmpresa]['banda sup boll'][(a-1).toString()]));
+                  
+                }
+
+                contador_pred++;
+                
+                chartDataBandaSupBoll_pred.insert(contador_pred, Tuple2(formattedDate,dataLista3[widget.tickEmpresa]['banda sup boll'][a.toString()]));       
+              }
+              
+
+            break;
+            case "MACD":
+              int contador = 0;
+              int a = 14;
+              int quantidade_elementos = (dataLista2[widget.tickEmpresa]['macd'].length)+a;
+
+              
+              for (a; a < quantidade_elementos; a++) {
+                String label = dataLista[widget.tickEmpresa]['Data'][a.toString()];
+                
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+                
+                chartDataMACD.insert(contador, Tuple2(formattedDate, dataLista2[widget.tickEmpresa]['macd'][a.toString()]));
+                contador++;
+              }
+              quantidade_elementos = quantidade_elementos + 14;
+              int contador_pred = 0;
+              //print(quantidade_elementos);
+              //print(a);
+             
+             for (a; a < quantidade_elementos; a++) {
+                //print(a);
+                String label = dataLista1[widget.tickEmpresa]['data'][a.toString()];
+                DateTime parsedDate = DateTime.parse(label);
+                String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+
+                if(contador_pred == 0){
+                  
+                  chartDataMACD_pred.insert(contador_pred, chartDataMACD[a-15]);
+                }
+
+                contador_pred++;
+                
+                chartDataMACD_pred.insert(contador_pred, Tuple2(formattedDate,dataLista3[widget.tickEmpresa]['macd'][a.toString()]));       
+              }
+            break;
+
+          }
+            
+
+
+      }
+
+      
+
+    
+    } catch (e) {
+      
+      setState(() {
+        hasError = true;
+      });
+      print('Erro ao carregar os dados: $e');
+    }
+    
+    setState(() {});
+ 
   }
-  Future<List<FlSpot>> testandoFunc() async {
-    
-    jsonData = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_cotacoes.json');
-    jsonData1 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
-    //String jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_media_movel.json');
-    jsonData2 = await rootBundle.loadString('asset/Empresas_data/${widget.cardIndex}_bandas_boll.json');
-    print(widget.cardIndex);
-    view = jsonDecode(jsonData);
-    view2 = jsonDecode(jsonData1);
-    view3 = json.decode(jsonData2);
-    //Map<String, dynamic> view4 = json.decode(jsonData3);
 
+  @override
+  void initState() {
+    _zoomPanBehavior = ZoomPanBehavior(
+      enableMouseWheelZooming: true,
+      enableDoubleTapZooming: true,
+      enablePinching: true,
+      zoomMode: ZoomMode.xy,
+      enablePanning: true,
+    );
+    _tooltipBehavior = TooltipBehavior(enable: true);
+    super.initState();
+    _carregarDados();
+  }
 
-    //print(view);
-    quant = view?['Close'].length;//determinando limites no eixo x do grafico
+  @override
+  void didUpdateWidget(GraficoLinear oldWidget) {
+    chartData = [];
+    chartData_pred = [];
     
-    //setando o array com os valores de cotação no grafico
-    for(int a = 0; a < view?['Close'].length; a++){
-      predicaoValor.insert(a,view?['Close'][a.toString()]);
-      chartData.insert(a, FlSpot(a.toDouble(), view?['Close'][a.toString()]));
-      
-    }
-    
-    // localizando onde começam as predicoes
-  /*  view['Data'].forEach((chave, valor) {
-    if (valor == view2['data'][("0").toString()]) {
-      inicio = double.parse(chave);
-    }
-  });*/
+    chartDataCotacoes = [];
+    chartDataCotacoes_pred = [];
 
-    // setando os valores de predição no grafico
-    /*for(int a = 0; a < view2['resultado'].length; a++){
-      chartData1.insert(a, FlSpot((inicio+=1).toDouble(), view2['resultado'][a.toString()]));
-    }*/
-    //setando os valores de media movel no grafico plotados 14 semanas a frente 
-    double contador = 13;
-    for(int a = 0; a < view2['media movel'].length; a++){
-      
-      chartData_media_movel.insert(a, FlSpot(contador, view2['media movel'][a.toString()]));
-      contador+=1;
-      
-    }
-    // setando os valores de banda sup bollinger no grafico plotados a 14 semanas a frente 
-    contador = 13;
-    for(int a = 0; a < view3['banda sup boll'].length; a++){
-      
-      chartData_sup_boll.insert(a, FlSpot(contador, view3['banda sup boll'][a.toString()]));
-      contador+=1;
-      
-    }
-    //setando os dados inf boll
-    contador = 13;
-    for(int a = 0; a < view3['banda inf boll'].length; a++){
-      
-      chartData_inf_boll.insert(a, FlSpot(contador, view3['banda inf boll'][a.toString()]));
-      contador+=1;
-      
-    }
+    chartDataMediaMovel = [];
+    chartDataMediaMovel_pred = [];
     
-    //determinando limites no tamanho do grafico
-    menorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual < elemento ? valorAtual : elemento);
-    maiorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual > elemento ? valorAtual : elemento);
-    maiorValor = double.parse(maiorValor!.toStringAsFixed(0)) + 5;
-    menorValor = double.parse(menorValor!.toStringAsFixed(0)) - 5;
+    chartDataRSI = [];
+    chartDataRSI_pred = [];
     
+    chartDataBandaSupBoll = [];
+    chartDataBandaSupBoll_pred = [];
     
+    chartDataBandaInfBoll = [];
+    chartDataBandaInfBoll_pred = [];
+    
+    chartDataMACD = [];
+    chartDataMACD_pred = [];
 
-    return chartData;
+    name1 = "";
+    name2 = "";
+
+    name3 = "";
+    name4 = "";
+    name5 = "";
+    name6 = "";
+
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.tickEmpresa != widget.tickEmpresa || oldWidget.tickEmpresa == widget.tickEmpresa){
+      //print(widget.tickEmpresa);
+    }
+    if (oldWidget.indicator != widget.indicator || oldWidget.indicator == widget.indicator ) {
+      
+      if(widget.tipoGrafico == 'Price' && oldWidget.tipoGrafico == 'Finanças'){
+        widget.indicator = 'Média Móvel 14';
+      }
+      else if (widget.tipoGrafico == 'Finanças' && oldWidget.tipoGrafico == 'Price'){
+        widget.indicator = 'Patrimônio Líquido';
+      }
+      
+     
+
+      _carregarDados();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<FlSpot>>(
-      future: testandoFunc(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Aqui você pode mostrar algum indicador de carregamento enquanto os dados estão sendo processados.
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-          // Caso ocorra um erro durante o processamento dos dados, você pode tratar aqui.
-          return Text('Erro ao carregar os dados');
-        } else {
-          // Quando os dados estiverem prontos, você pode construir o gráfico.
-          chartData = snapshot.data ?? [];
-          return LineChart(LineChartData(
-      lineBarsData: [
-        //cotacoes:
-        LineChartBarData(
-          spots: chartData,
-          isCurved: false,
-          dotData: const FlDotData(
-            show: false,
-          ),
+    if(widget.tipoGrafico == 'Finanças'){
+      return Scaffold(
+        body: SafeArea(
+            child: Center(
+                child: Container(
+                    child: SfCartesianChart(
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.bottom,
+        alignment: ChartAlignment.center,
+      ),
+      primaryXAxis: CategoryAxis(
+        labelRotation: 45,
+        labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <ChartSeries>[
+        LineSeries<Tuple3<int, String, double>, String>(
+          dataSource: chartData,
+          xValueMapper: (Tuple3<int, String, double> spot, _) =>
+              spot.item2.toString(),
+          yValueMapper: (Tuple3<int, String, double> spot, _) =>
+              spot.item3.toDouble(),
           color: Colors.blue,
-          barWidth: 3,
+          name: "$name1",
         ),
-        /*//predicoes:
-        LineChartBarData(
-          spots: chartData1,
-          isCurved: false,
-          dotData: const FlDotData(
-            show: false,
-          ),
+        LineSeries<Tuple3<int, String, double>, String>(
+          dataSource: chartData_pred,
+          xValueMapper: (Tuple3<int, String, double> spot, _) =>
+              spot.item2.toString(),
+          yValueMapper: (Tuple3<int, String, double> spot, _) =>
+              spot.item3.toDouble(),
           color: Colors.red,
-          barWidth: 3,
+          name: "$name2",
         ),
-        *///media movel:
-        LineChartBarData(
-          spots: chartData_media_movel,
-          isCurved: false,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          color: Colors.orange,
-          barWidth: 3,
+      ],
+      zoomPanBehavior: _zoomPanBehavior,
+    )))));
+    
+    }
+    else if(widget.indicator == "Média Móvel 14"){
+      return Scaffold(
+        body: SafeArea(
+            child: Center(
+                child: Container(
+                    child: SfCartesianChart(
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.bottom,
+        alignment: ChartAlignment.center,
+      ),
+      primaryXAxis: CategoryAxis(
+        labelRotation: 45,
+        labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <ChartSeries>[
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataCotacoes,
+          animationDelay: 500,
+          animationDuration: 3000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.blue,
+          name: "$name1",
         ),
-        // banda sup boll
-        LineChartBarData(
-          spots: chartData_sup_boll,
-          isCurved: false,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          color: const Color.fromARGB(255, 194, 98, 211),
-          barWidth: 3,
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataCotacoes_pred,
+          animationDelay: 500,
+          animationDuration: 3000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.red,
+          name: "$name2",
         ),
-        // banda inf boll
-        LineChartBarData(
-          spots: chartData_inf_boll,
-          isCurved: false,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          color: const Color.fromARGB(255, 194, 98, 211),
-          barWidth: 3,
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataMediaMovel,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Color.fromARGB(255, 255, 124, 2),
+          name: "$name3",
+        ),
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataMediaMovel_pred,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Color.fromARGB(255, 65, 0, 0),
+          name: "$name4",
+        ),
+        ],
+      zoomPanBehavior: _zoomPanBehavior,
+      ))))
+
+
+      );
+    }
+    else if(widget.indicator == 'RSI'){
+      return Scaffold( body: SafeArea(
+            child: Center(
+                child: Container(
+                    child: SfCartesianChart(
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.bottom,
+        alignment: ChartAlignment.center,
+      ),
+      primaryXAxis: CategoryAxis(
+        labelRotation: 45,
+        labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <ChartSeries>[
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataRSI,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.blue,
+          name: "$name1",
+        ),
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataRSI_pred,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.red,
+          name: "$name2",
+        )
+        
+       
+        ],
+      zoomPanBehavior: _zoomPanBehavior,
+      ))))
+
+
+      );
+    }
+
+    else if(widget.indicator == "Bollinger Bands"){
+      return Scaffold(
+        body: SafeArea(
+            child: Center(
+                child: Container(
+                    child: SfCartesianChart(
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.bottom,
+        alignment: ChartAlignment.center,
+      ),
+      primaryXAxis: CategoryAxis(
+        labelRotation: 45,
+        labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <ChartSeries>[
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataCotacoes,
+          animationDelay: 500,
+          animationDuration: 3000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.blue,
+          name: "$name1",
+        ),
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataCotacoes_pred,
+          animationDelay: 500,
+          animationDuration: 3000,
+          
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.red,
+          name: "$name2",
+        ),
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataBandaInfBoll,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.purple,
+          name: "$name3",
+        ),
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataBandaSupBoll,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.purple,
+          name: "$name5",
+        ),
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataBandaInfBoll_pred,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: const Color.fromARGB(255, 51, 1, 59),
+          name: "$name4",
+        ),
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataBandaSupBoll_pred,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: const Color.fromARGB(255, 51, 1, 59),
+          name: "$name6",
         ),
         
-      ],
-      titlesData:FlTitlesData(show: true, 
-      
-      leftTitles: AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: true, interval: 10)), 
-      
-      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40, )), 
-      
-      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false, reservedSize: 40)), 
-      
-      bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 14, getTitlesWidget: bottomTitleWidgets)), 
-      
-      
-      
-      ), 
-      borderData: FlBorderData(border: Border.all(color: Colors.black, width: 5.0, style: BorderStyle.solid)),
-      minX: 0,
-      maxX: null,//quant,
-      minY: menorValor,
-      maxY: maiorValor,
-      backgroundColor: Colors.black87
-      //clipData: FlClipData.none(),
-    )
-            // Resto do seu código do gráfico
-          );
-        }
-      },
-    );
-  }
-}
+        ],
+      zoomPanBehavior: _zoomPanBehavior,
+      ))))
 
 
+      );
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*class GraficoLinear extends StatelessWidget {
-  List<dynamic> view = [];
-  
-  List<dynamic> filteredView = [];
-  String cardIndex;
-  double ?menorValor;
-  double ?maiorValor;
-  List <dynamic> predicaoValor = [];
-  final List<FlSpot> chartData = [
-    const FlSpot(0, 2),
-    const FlSpot(1, 5),
-    const FlSpot(2, 4),
-    const FlSpot(3, 7),
-    const FlSpot(4, 6),
-    const FlSpot(5, 10),
-    const FlSpot(6, 9),
-    const FlSpot(7, 2),
-    const FlSpot(8, 5),
-    const FlSpot(9, 4),
-    const FlSpot(10, 7),
-    const FlSpot(11, 6),
-    const FlSpot(12, 10),
-    const FlSpot(13, 9),
-  ];
-  GraficoLinear(this.cardIndex, {super.key});
-  
-  Future<void> testandoFunc() async {
-    String jsonData = await rootBundle.loadString('asset/Empresas_data/' + cardIndex + '_fundamentalist.json');
-    view = jsonDecode(jsonData);
-    filteredView = view;
-    print(filteredView['Close']);
-    
-    for(int a = 0; a < chartData.length; a++){
-      predicaoValor.insert(a,filteredView['Close'][a.toString()]);
-      chartData[a] = FlSpot(a.toDouble(), filteredView['Close'][a.toString()]);
     }
-    menorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual < elemento ? valorAtual : elemento);
-    maiorValor = predicaoValor.reduce((valorAtual, elemento) => valorAtual > elemento ? valorAtual : elemento);
-    maiorValor = double.parse(maiorValor!.toStringAsFixed(2));
-    menorValor = double.parse(menorValor!.toStringAsFixed(2));
-    print(maiorValor);
-    print(menorValor);
-    print(chartData);
-   
-  }
-  
-  @override
-  LineChart build(BuildContext context) {
-    testandoFunc();
-    return LineChart(LineChartData(
-      lineBarsData: [
-        LineChartBarData(
-          spots: chartData,
-          isCurved: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          color: Colors.blue,
-          barWidth: 3,
-        ),
-      ],
-      borderData: FlBorderData(
-          border: const Border(bottom: BorderSide(), left: BorderSide())),
-      gridData: const FlGridData(show: false),
-      titlesData: const FlTitlesData(
-        leftTitles: AxisTitles(
-            axisNameSize: 5,
-            sideTitles: SideTitles(showTitles: true, reservedSize: 30)),
-        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    else if(widget.indicator == "MACD"){
+      return Scaffold( body: SafeArea(
+            child: Center(
+                child: Container(
+                    child: SfCartesianChart(
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.bottom,
+        alignment: ChartAlignment.center,
       ),
-      minX: 0,
-      maxX: 14,
-      minY: menorValor,
-      maxY: maiorValor,
-    ));
+      primaryXAxis: CategoryAxis(
+        labelRotation: 45,
+        labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <ChartSeries>[
+        FastLineSeries<Tuple2<String, double>, String>(
+          dataSource: chartDataMACD,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.blue,
+          name: "$name1",
+        ),
+        FastLineSeries<Tuple2< String, double>, String>(
+          dataSource: chartDataMACD_pred,
+          animationDelay: 100,
+          animationDuration: 5000,
+          xValueMapper: (Tuple2<String, double> spot, _) =>
+              spot.item1.toString(),
+          yValueMapper: (Tuple2< String, double> spot, _) =>
+              spot.item2.toDouble(),
+          color: Colors.red,
+          name: "$name2",
+        )
+        
+       
+        ],
+      zoomPanBehavior: _zoomPanBehavior,
+      ))))
+
+
+      );
+    }
+    
+    else{// Grafico de Price
+    return Scaffold();
+     
+    }
+    
   }
 }
-*/
+
+class ChartData {
+  ChartData(this.x, this.y);
+  final String x;
+  final double? y;
+}
