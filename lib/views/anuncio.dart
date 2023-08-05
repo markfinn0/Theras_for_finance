@@ -1,10 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'views/menu_empresas/main.dart';
-import 'views/details_screen/main.dart';
 import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -12,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
+  // Register the web plugin.
+
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(
     'adViewType',
@@ -30,37 +25,45 @@ void main() {
       ..src = 'ad copy.html'
       ..style.border = 'none',
   );
-  runApp(const MyApp());
+
 }
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Web AdSense Ads'),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Center(child: adsenseAdsView1()),Center(child: adsenseAdsView()) 
+            ],
+          ),
+          
+        ),
+      ),
+    );
+  }
+}
+
 Widget adsenseAdsView() {
-  return SizedBox(
-    height: 300.0,
-    width: 280.0,
+  return const SizedBox(
+    height: 100.0,
+    width: 320.0,
     child: HtmlElementView(
       viewType: 'adViewType',
     ),
   );
 }
 Widget adsenseAdsView1() {
-  return SizedBox(
-    height: 300.0,
-    width: 280.0,
+  return const SizedBox(
+    height: 100.0,
+    width: 320.0,
     child: HtmlElementView(
       viewType: 'adViewType1',
     ),
   );
-}
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Theras for Finance',
-      home: FutureBuilder(builder: (context, snapshot) {
-        return const MenuEmpresas(title: 'T H Ξ R A S');
-      }),
-    );
-  }
 }

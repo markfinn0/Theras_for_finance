@@ -125,8 +125,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
 
       switch (widget.indicador) {
         case "Patrimônio Líquido":
-          print(widget.indicador);
-          print(widget.tipoGrafico);
+          
           widget.dividendos = false;
           widget.patrimonio = true;
           break;

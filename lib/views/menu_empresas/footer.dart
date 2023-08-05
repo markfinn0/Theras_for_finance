@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:theras_app/views/anuncio.dart';
 class Footer extends StatelessWidget {
   const Footer({super.key});
 

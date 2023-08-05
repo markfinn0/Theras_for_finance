@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theras_app/main.dart';
 import 'grafico_linear.dart';
 import './gavetinha.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -25,7 +26,7 @@ class DetailsScreenState extends State<DetailsScreen> {
   final int paneProportion = 50;
   String tipoDeGrafico = "Finanças";
   late List<String> listaTicksEmpresa = [];
-  String tipoDeGrafico2 = "Patrimônio Líquido";
+  String Indicador = "Patrimônio Líquido";
    
   late int tipoEmpresa;
 
@@ -104,7 +105,8 @@ Future<void> loadData() async {
           ),
         ),
         body: SingleChildScrollView(
-            child: Stack(children: [
+            child: Stack(
+              children: [ Column(children: [adsenseAdsView(), adsenseAdsView1()],),
           Container(
             margin: const EdgeInsets.only(top: 30, bottom: 50),
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -461,7 +463,13 @@ Future<void> loadData() async {
                                               () => tipoDeGrafico = val),
                                           callback2: (value) {
                                             setState(() {
-                                              tipoDeGrafico2 = value;
+                                              tipoDeGrafico = value;
+                                              if(tipoDeGrafico == 'Price'){
+                                                Indicador = 'Média Móvel 14';
+                                              }
+                                              if(tipoDeGrafico == 'Finanças'){
+                                                Indicador = 'Patrimônio Líquido';
+                                              }
                                             });
                                           },
                                         ),
@@ -475,8 +483,9 @@ Future<void> loadData() async {
                                                     .indicadoresPriceLista,
                                                 callback2: (value) {
                                                   setState(() {
-                                                    tipoDeGrafico2 = value;
-                                                    //print('na main' + value);
+                                                    
+                                                    Indicador = value;
+                                                  
                                                   });
                                                 },
                                               ),
@@ -505,7 +514,7 @@ Future<void> loadData() async {
                                                     .indicadoresFundamentalistasLista,
                                                 callback2: (value) {
                                                   setState(() {
-                                                    tipoDeGrafico2 = value;
+                                                    Indicador = value;
                                                   });
                                                 },
                                               ),
@@ -533,10 +542,10 @@ Future<void> loadData() async {
                                           child: SizedBox(
                                             height: 500,
                                             // width: 100,
-
+                                          
                                             child: GraficoLinear(
                                                 widget.cardIndex,
-                                                tipoDeGrafico2, tipoDeGrafico, tipoEmpresa),
+                                                Indicador, tipoDeGrafico, tipoEmpresa),
                                           ),
                                         ),
                                       ),
@@ -556,6 +565,7 @@ Future<void> loadData() async {
               },
             ),
           ),
+          
           Footer()
         ])));
   }
