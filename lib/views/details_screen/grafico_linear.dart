@@ -26,8 +26,9 @@ class GraficoLinear extends StatefulWidget {
   late String indicator;
   late String tipoGrafico;
   late int tickEmpresa;
+  late bool hover;
   GraficoLinear(
-      this.cardIndex, this.indicator, this.tipoGrafico, this.tickEmpresa,
+      this.cardIndex, this.indicator, this.tipoGrafico, this.tickEmpresa, this.hover,
       {Key? key})
       : super(key: key);
 
@@ -627,7 +628,15 @@ class _GraficoLinearState extends State<GraficoLinear> {
     );
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
-    _carregarDados();
+    if(widget.hover == true){
+      print("estou "+ widget.hover.toString());
+
+    }
+    else{
+      _carregarDados();
+      print("estou aqui " + widget.hover.toString());
+    }
+    
   }
 
   @override
@@ -666,6 +675,7 @@ class _GraficoLinearState extends State<GraficoLinear> {
         //widget.indicator = oldWidget.indicator;
 
       }*/
+    
     if (widget.tipoGrafico == 'Price' && oldWidget.tipoGrafico == 'Finanças') {
       widget.indicator = 'Média Móvel 14';
       _carregarDados();

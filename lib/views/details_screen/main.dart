@@ -89,7 +89,7 @@ class DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
+          backgroundColor: const Color.fromRGBO(0, 95, 156, 50),
           centerTitle: true,
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +104,7 @@ class DetailsScreenState extends State<DetailsScreen> {
         ),
         body: SingleChildScrollView(
             physics: isHovered ? const NeverScrollableScrollPhysics() : null,
-            child: Stack(children: [Column(children: [adsenseAdsView(), adsenseAdsView1()],),
+            child: Stack(children: [
               Container(
                 margin: const EdgeInsets.only(top: 30, bottom: 50),
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -160,8 +160,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                 ),
                                                 borderedContainer(
                                                     widget.cardIndex,
-                                                    color: Color.fromRGBO(
-                                                        8, 32, 50, 50),
+                                                    color: const Color.fromRGBO(0, 95, 156, 50),
                                                     fontSize: 30,
                                                     corTexto: Colors.white,
                                                     padding: const EdgeInsets
@@ -232,8 +231,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                     direction: Axis.vertical,
                                                     children: [
                                                       borderedContainer("Nome:",
-                                                          color: Color.fromRGBO(
-                                                              8, 32, 50, 50),
+                                                          color: const Color.fromRGBO(0, 95, 156, 50),
                                                           padding:
                                                               const EdgeInsets
                                                                       .fromLTRB(
@@ -248,8 +246,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       borderedContainer(
                                                           "Setor:",
                                                           color:
-                                                              Color.fromRGBO(8,
-                                                                  32, 50, 50),
+                                                              const Color.fromRGBO(0, 95, 156, 50),
                                                           padding:
                                                               const EdgeInsets
                                                                       .fromLTRB(
@@ -299,7 +296,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           ]),
                                       borderedContainer(
                                         "Indicadores Relativos",
-                                        color: Color.fromRGBO(8, 32, 50, 50),
+                                        color: const Color.fromRGBO(0, 95, 156, 50),
                                         padding: const EdgeInsets.fromLTRB(
                                             10, 15, 10, 15),
                                         corTexto: Colors.white,
@@ -313,8 +310,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               direction: Axis.vertical,
                                               children: [
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "Valor de Mercado:",
                                                     alignment:
@@ -325,8 +321,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "Lucro Líquido:",
                                                     alignment:
@@ -337,8 +332,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "Cres.Rec 5 anos:",
                                                     alignment:
@@ -349,8 +343,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "P/L:",
                                                     alignment:
@@ -361,8 +354,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "Dividend Yield:",
                                                     alignment:
@@ -373,8 +365,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "ROE:",
                                                     alignment:
@@ -385,8 +376,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                   ),
                                                 ), // Sem borda
                                                 Container(
-                                                  color: Color.fromRGBO(
-                                                      8, 32, 50, 50),
+                                                  color: const Color.fromRGBO(0, 95, 156, 50),
                                                   child: borderedContainer(
                                                     "Lucro por Ação:",
                                                     alignment:
@@ -475,7 +465,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                 Container(
                                   padding: const EdgeInsets.only(top: 80),
                                   child: Column(
-                                    children: [
+                                    children: [adsenseAdsView(),
                                       Container(
                                         padding: const EdgeInsets.fromLTRB(
                                             20, 0, 20, 20),
@@ -579,7 +569,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       widget.cardIndex,
                                                       tipoDeGrafico2,
                                                       tipoDeGrafico,
-                                                      tipoEmpresa),
+                                                      tipoEmpresa, isHovered),
                                                 ),
                                               ),
                                             ),
