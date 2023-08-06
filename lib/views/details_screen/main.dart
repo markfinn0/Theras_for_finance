@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theras_app/main.dart';
 import 'grafico_linear.dart';
 import './gavetinha.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -103,7 +104,7 @@ class DetailsScreenState extends State<DetailsScreen> {
         ),
         body: SingleChildScrollView(
             physics: isHovered ? const NeverScrollableScrollPhysics() : null,
-            child: Stack(children: [
+            child: Stack(children: [Column(children: [adsenseAdsView(), adsenseAdsView1()],),
               Container(
                 margin: const EdgeInsets.only(top: 30, bottom: 50),
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -204,9 +205,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                 height:
                                                     80, // Defina o tamanho desejado da altura da imagem
                                                 child: Image.asset(
-                                                  'company_imagens/' +
-                                                      widget.cardIndex +
-                                                      '.png',
+                                                  'assets/company_imagens/${widget.cardIndex.toLowerCase()}.png',
                                                   fit: BoxFit.contain,
                                                   errorBuilder: (context, error,
                                                       stackTrace) {
