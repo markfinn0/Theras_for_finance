@@ -27,8 +27,8 @@ class GraficoLinear extends StatefulWidget {
   late String tipoGrafico;
   late int tickEmpresa;
   late bool hover;
-  GraficoLinear(
-      this.cardIndex, this.indicator, this.tipoGrafico, this.tickEmpresa, this.hover,
+  GraficoLinear(this.cardIndex, this.indicator, this.tipoGrafico,
+      this.tickEmpresa, this.hover,
       {Key? key})
       : super(key: key);
 
@@ -628,19 +628,17 @@ class _GraficoLinearState extends State<GraficoLinear> {
     );
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
-    if(widget.hover == true){
-      print("estou "+ widget.hover.toString());
-
-    }
-    else{
+    if (widget.hover == true) {
+      print("estou " + widget.hover.toString());
+    } else {
       _carregarDados();
       print("estou aqui " + widget.hover.toString());
     }
-    
   }
 
   @override
   void didUpdateWidget(GraficoLinear oldWidget) {
+    print('update');
     chartData = [];
     chartData_pred = [];
 
@@ -675,24 +673,23 @@ class _GraficoLinearState extends State<GraficoLinear> {
         //widget.indicator = oldWidget.indicator;
 
       }*/
-    
+
     if (widget.tipoGrafico == 'Price' && oldWidget.tipoGrafico == 'Finanças') {
       widget.indicator = 'Média Móvel 14';
-      _carregarDados();
     } else if (widget.tipoGrafico == 'Finanças' &&
         oldWidget.tipoGrafico == 'Price') {
       widget.indicator = 'Patrimônio Líquido';
-      _carregarDados();
     } else if (oldWidget.tickEmpresa != widget.tickEmpresa ||
         oldWidget.tickEmpresa == widget.tickEmpresa) {
-      //print(widget.tickEmpresa);
-      _carregarDados();
     } else if (oldWidget.indicator != widget.indicator ||
-        oldWidget.indicator == widget.indicator) {
-      _carregarDados();
-    } else {
-      _carregarDados();
+        oldWidget.indicator == widget.indicator) {}
+    if (widget.indicator == 'Price') {
+      widget.indicator = 'Média Móvel 14';
     }
+    if (widget.indicator == 'Finanças') {
+      widget.indicator = 'Patrimônio Líquido';
+    }
+    _carregarDados();
   }
 
   @override
@@ -757,7 +754,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
         series: <ChartSeries>[
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataCotacoes,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -767,7 +763,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataCotacoes_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -777,7 +772,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataMediaMovel,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -787,7 +781,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataMediaMovel_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -817,7 +810,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
         series: <ChartSeries>[
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataRSI,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -827,7 +819,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataRSI_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -858,7 +849,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
         series: <ChartSeries>[
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataCotacoes,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -868,7 +858,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataCotacoes_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -878,7 +867,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataBandaInfBoll,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -888,7 +876,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataBandaSupBoll,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -898,7 +885,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataBandaInfBoll_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -908,7 +894,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataBandaSupBoll_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -938,7 +923,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
         series: <ChartSeries>[
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataMACD,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
@@ -948,7 +932,6 @@ class _GraficoLinearState extends State<GraficoLinear> {
           ),
           LineSeries<Tuple2<String, double>, String>(
             dataSource: chartDataMACD_pred,
-            
             xValueMapper: (Tuple2<String, double> spot, _) =>
                 spot.item1.toString(),
             yValueMapper: (Tuple2<String, double> spot, _) =>
