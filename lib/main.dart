@@ -31,7 +31,7 @@ void main() {
   runApp(const MyApp());
 }
 Widget adsenseAdsView() {
-  return SizedBox(
+  return Container(
     height: 300.0,
     width: 280.0,
     child: HtmlElementView(
@@ -40,9 +40,9 @@ Widget adsenseAdsView() {
   );
 }
 Widget adsenseAdsView1() {
-  return SizedBox(
-    height: 300.0,
-    width: 280.0,
+  return Container(
+    height: 280.0,
+    width: 400.0,
     child: HtmlElementView(
       viewType: 'adViewType1',
     ),

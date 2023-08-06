@@ -16,7 +16,7 @@ class _MenuEmpresasState extends State<MenuEmpresas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(8, 32, 50, 50),
+        backgroundColor: const Color.fromRGBO(0, 95, 156, 50),
         centerTitle: true,
         actions: [],
         title: Row(
