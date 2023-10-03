@@ -40,7 +40,7 @@ class HeaderTheras extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon: Image.asset('../../assets/YT.png'),
+                      icon: Image.asset('assets/company_imagens/YT.png'),
                       iconSize: 50,
                       onPressed: () async {
                         // final Uri url = Uri.parse('https://flutter.dev');
