@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "41692962765",
+    "firebase_url": "https://theras-c95da-default-rtdb.firebaseio.com",
+    "project_id": "theras-c95da",
+    "storage_bucket": "theras-c95da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41692962765:android:913b86544768abda996e84",
+        "android_client_info": {
+          "package_name": "com.example.theras_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIKlMCoNmxbToV_DzPyAH9t8JIHoFC6FI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

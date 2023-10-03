@@ -8,8 +8,30 @@ import 'views/details_screen/main.dart';
 import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void inicializarFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
+
+// void main() {
+//   // ignore: undefined_prefixed_name
+// ui.platformViewRegistry.registerViewFactory(
+//   'adViewType',
+//   (int viewId) => IFrameElement()
+//     ..width = '320'
+//     ..height = '100'
+//     ..src = 'ad.html'
+//     ..style.border = 'none',
+// );
+//   // ignore: undefined_prefixed_name
+//   inicializarFirebase();
+//   runApp(const MyApp());
+// }
+void main() async {
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(
     'adViewType',
@@ -19,35 +41,25 @@ void main() {
       ..src = 'ad.html'
       ..style.border = 'none',
   );
-  // ignore: undefined_prefixed_name
-  ui.platformViewRegistry.registerViewFactory(
-    'adViewType1',
-    (int viewId) => IFrameElement()
-      ..width = '320'
-      ..height = '100'
-      ..src = 'ad copy.html'
-      ..style.border = 'none',
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
+
 Widget adsenseAdsView() {
   return Container(
-    height: 300.0,
-    width: 280.0,
-    child: HtmlElementView(
+    margin: const EdgeInsets.only(bottom: 40),
+    height: 100.0,
+    width: 800.0,
+    child: const HtmlElementView(
       viewType: 'adViewType',
     ),
   );
 }
-Widget adsenseAdsView1() {
-  return Container(
-    height: 280.0,
-    width: 400.0,
-    child: HtmlElementView(
-      viewType: 'adViewType1',
-    ),
-  );
-}class MyApp extends StatelessWidget {
+
+class MyApp extends StatelessWidget {
   const MyApp({Key? key});
 
   @override
