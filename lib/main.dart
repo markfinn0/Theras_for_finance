@@ -8,8 +8,30 @@ import 'views/details_screen/main.dart';
 import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void inicializarFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
+
+// void main() {
+//   // ignore: undefined_prefixed_name
+// ui.platformViewRegistry.registerViewFactory(
+//   'adViewType',
+//   (int viewId) => IFrameElement()
+//     ..width = '320'
+//     ..height = '100'
+//     ..src = 'ad.html'
+//     ..style.border = 'none',
+// );
+//   // ignore: undefined_prefixed_name
+//   inicializarFirebase();
+//   runApp(const MyApp());
+// }
+void main() async {
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(
     'adViewType',
@@ -19,7 +41,10 @@ void main() {
       ..src = 'ad.html'
       ..style.border = 'none',
   );
-  // ignore: undefined_prefixed_name
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

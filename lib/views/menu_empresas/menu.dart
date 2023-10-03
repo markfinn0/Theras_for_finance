@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../details_screen/main.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:firebase_database/firebase_database.dart';
 
 class MenuContainer extends StatefulWidget {
   @override
@@ -12,11 +13,22 @@ class _MenuContainerState extends State<MenuContainer> {
   List<dynamic> view = [];
   List<dynamic> filteredView = [];
   TextEditingController searchController = TextEditingController();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+
+  void setarTabela() async {
+    DatabaseReference ref = database.ref('tabela_testes');
+    await ref.set({
+      "name": "Marcola",
+      "age": 20,
+      "address": {"line1": "Casa do Caralho"}
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     loadCardsData();
+    setarTabela();
   }
 
   Future<void> loadCardsData() async {
