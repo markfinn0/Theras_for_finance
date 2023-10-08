@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:theras_app/views/login_screen/main.dart';
 import 'views/menu_empresas/main.dart';
 import 'views/details_screen/main.dart';
 import 'dart:html';
@@ -68,8 +69,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Theras for Finance',
       home: FutureBuilder(builder: (context, snapshot) {
-        return const MenuEmpresas(title: 'T H Ξ R A S');
-      }),
+        return const LoginScreen();
+        // return const MenuEmpresas(title: 'T H Ξ R A S');
+      }, future: null,),
     );
   }
 }
