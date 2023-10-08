@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:theras_app/views/login_screen/cadastro.dart';
 
 import 'package:theras_app/views/menu_empresas/main.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -37,12 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
           await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
 
-      if (user != null) {
-        // O usuário fez login com sucesso, você pode direcioná-lo para a próxima tela aqui.
-      }
+      if (user != null) {}
     } catch (error) {
       print(error.toString());
-      // Trate os erros de login aqui, se necessário.
     }
   }
 
@@ -130,49 +129,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     )),
-                ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final email = _emailController.text;
-                        final password = _passwordController.text;
-
-                        try {
-                          final userCredential =
-                              await _auth.signInWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          );
-                          if (userCredential.user != null) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MenuEmpresas(title: "THERAS"),
-                              ),
-                            );
-                          } else {
-                            setState(() {
-                              _errorMessage = 'Credenciais inválidas';
-                            });
-                          }
-                        } catch (e) {
-                          setState(() {
-                            _errorMessage = 'Erro durante o login';
-                          });
-                        }
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 20),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(fontSize: 20),
+                Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Cadastro(),
                           ),
-                        ),
-                      ],
-                    )),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 100, vertical: 20),
+                            child: const Text(
+                              "Cadastro",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
                 const SizedBox(height: 20),
                 if (_errorMessage != null)
                   const Text(
