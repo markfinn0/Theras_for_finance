@@ -47,121 +47,230 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isWeb() {
+      return MediaQuery.of(context).size.width > 900;
+    }
+
+    const double tamBorda = 39;
+
     return Scaffold(
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'E-mail',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira um e-mail válido';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Senha',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira uma senha válida';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final email = _emailController.text;
-                        final password = _passwordController.text;
-
-                        try {
-                          final userCredential =
-                              await _auth.signInWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          );
-                          if (userCredential.user != null) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MenuEmpresas(title: "THERAS"),
-                              ),
-                            );
-                          } else {
-                            setState(() {
-                              _errorMessage = 'Credenciais inválidas';
-                            });
-                          }
-                        } catch (e) {
-                          setState(() {
-                            _errorMessage = 'Erro durante o login';
-                          });
-                        }
-                      }
-                    },
+        child: Container(
+          padding: const EdgeInsets.only(top: 30),
+          child: Flex(
+            direction: isWeb() ? Axis.horizontal : Axis.vertical,
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: Image.asset('../../../assets/UX/therasLogin.png')),
+              Flexible(
+                  flex: isWeb() ? 1 : 2,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 20),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ],
-                    )),
-                Container(
-                  padding: EdgeInsets.only(top: 20),
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Cadastro(),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 100, vertical: 20),
-                            child: const Text(
-                              "Cadastro",
-                              style: TextStyle(fontSize: 20),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          scrollPadding: const EdgeInsets.all(50),
+                          style: const TextStyle(fontSize: 28, height: 2),
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelStyle: TextStyle(color: Color(0xFF7063FF)),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xFF7063FF), width: 1),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xFF7063FF), width: 2),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
+                            ),
+                            label: Text("Email"),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 10, left: 20),
+                              child: Icon(
+                                Icons.person,
+                                color: Color(0xFF7063FF),
+                                size: 40,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
                             ),
                           ),
-                        ],
-                      )),
-                ),
-                const SizedBox(height: 20),
-                if (_errorMessage != null)
-                  const Text(
-                    "Usuário ou Senha estão Incorretos",
-                    style: TextStyle(color: Colors.red),
-                  ),
-              ],
-            ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, insira um e-mail válido';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          style: const TextStyle(fontSize: 30),
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelStyle: TextStyle(color: Color(0xFF7063FF)),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xFF7063FF), width: 1),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xFF7063FF), width: 2),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
+                            ),
+                            labelText: 'Senha',
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Color(0xFF7063FF),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(tamBorda),
+                                  right: Radius.circular(tamBorda)),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, insira uma senha válida';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ))
+            ],
           ),
         ),
+        // child: Padding(
+        //   padding: const EdgeInsets.all(16.0),
+        //   child: Form(
+        //     key: _formKey,
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         const SizedBox(height: 20),
+        //         TextFormField(
+        //           controller: _emailController,
+        //           decoration: const InputDecoration(
+        //             labelText: 'E-mail',
+        //             border: OutlineInputBorder(),
+        //           ),
+        //           validator: (value) {
+        //             if (value == null || value.isEmpty) {
+        //               return 'Por favor, insira um e-mail válido';
+        //             }
+        //             return null;
+        //           },
+        //         ),
+        //         const SizedBox(height: 20),
+        //         TextFormField(
+        //           controller: _passwordController,
+        //           obscureText: true,
+        //           decoration: const InputDecoration(
+        //             labelText: 'Senha',
+        //             border: OutlineInputBorder(),
+        //           ),
+        //           validator: (value) {
+        //             if (value == null || value.isEmpty) {
+        //               return 'Por favor, insira uma senha válida';
+        //             }
+        //             return null;
+        //           },
+        //         ),
+        //         const SizedBox(height: 20),
+        //         ElevatedButton(
+        //             onPressed: () async {
+        //               if (_formKey.currentState!.validate()) {
+        //                 final email = _emailController.text;
+        //                 final password = _passwordController.text;
+
+        //                 try {
+        //                   final userCredential =
+        //                       await _auth.signInWithEmailAndPassword(
+        //                     email: email,
+        //                     password: password,
+        //                   );
+        //                   if (userCredential.user != null) {
+        //                     Navigator.of(context).pushReplacement(
+        //                       MaterialPageRoute(
+        //                         builder: (context) =>
+        //                             MenuEmpresas(title: "THERAS"),
+        //                       ),
+        //                     );
+        //                   } else {
+        //                     setState(() {
+        //                       _errorMessage = 'Credenciais inválidas';
+        //                     });
+        //                   }
+        //                 } catch (e) {
+        //                   setState(() {
+        //                     _errorMessage = 'Erro durante o login';
+        //                   });
+        //                 }
+        //               }
+        //             },
+        //             child: Column(
+        //               children: [
+        //                 Container(
+        //                   padding: const EdgeInsets.symmetric(
+        //                       horizontal: 100, vertical: 20),
+        //                   child: const Text(
+        //                     "Login",
+        //                     style: TextStyle(fontSize: 20),
+        //                   ),
+        //                 ),
+        //               ],
+        //             )),
+        //         Container(
+        //           padding: EdgeInsets.only(top: 20),
+        //           child: ElevatedButton(
+        //               onPressed: () async {
+        //                 Navigator.of(context).pushReplacement(
+        //                   MaterialPageRoute(
+        //                     builder: (context) => const Cadastro(),
+        //                   ),
+        //                 );
+        //               },
+        //               child: Column(
+        //                 children: [
+        //                   Container(
+        //                     padding: const EdgeInsets.symmetric(
+        //                         horizontal: 100, vertical: 20),
+        //                     child: const Text(
+        //                       "Cadastro",
+        //                       style: TextStyle(fontSize: 20),
+        //                     ),
+        //                   ),
+        //                 ],
+        //               )),
+        //         ),
+        //         const SizedBox(height: 20),
+        //         if (_errorMessage != null)
+        //           const Text(
+        //             "Usuário ou Senha estão Incorretos",
+        //             style: TextStyle(color: Colors.red),
+        //           ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }
