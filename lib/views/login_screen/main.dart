@@ -21,30 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _errorMessage;
 
-  get googleSignIn => null;
-
-  Future<void> _handleGoogleSignIn() async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      final User? user = userCredential.user;
-
-      if (user != null) {}
-    } catch (error) {
-      print(error.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isWeb() {
@@ -52,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     const double tamBorda = 39;
+    const double tamBotao = 20;
 
     return Scaffold(
       body: Center(
@@ -70,10 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 20),
                         TextFormField(
-                          scrollPadding: const EdgeInsets.all(50),
-                          style: const TextStyle(fontSize: 28, height: 2),
+                          style: const TextStyle(fontSize: 25, height: 2),
                           controller: _emailController,
                           decoration: const InputDecoration(
                             labelStyle: TextStyle(color: Color(0xFF7063FF)),
@@ -115,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
-                          style: const TextStyle(fontSize: 30),
+                          style: const TextStyle(fontSize: 25, height: 2),
                           controller: _passwordController,
                           obscureText: true,
                           decoration: const InputDecoration(
@@ -135,9 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   right: Radius.circular(tamBorda)),
                             ),
                             labelText: 'Senha',
-                            prefixIcon: Icon(
-                              Icons.person,
-                              color: Color(0xFF7063FF),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 10, left: 20),
+                              child: Icon(
+                                Icons.lock,
+                                color: Color(0xFF7063FF),
+                                size: 40,
+                              ),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.horizontal(
@@ -152,6 +131,64 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: 500, // Largura desejada
+                          height: 80, // Altura desejada
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color(0xFF7063FF),
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                final email = _emailController.text;
+                                final password = _passwordController.text;
+
+                                try {
+                                  final userCredential =
+                                      await _auth.signInWithEmailAndPassword(
+                                    email: email,
+                                    password: password,
+                                  );
+                                  if (userCredential.user != null) {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MenuEmpresas(title: "THERAS"),
+                                      ),
+                                    );
+                                  } else {
+                                    setState(() {
+                                      _errorMessage = 'Credenciais inválidas';
+                                    });
+                                  }
+                                } catch (e) {
+                                  setState(() {
+                                    _errorMessage = 'Erro durante o login';
+                                  });
+                                }
+                              }
+                            },
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        if (_errorMessage != null)
+                          Text(
+                            "Usuário ou Senha estão Incorretos",
+                            style: TextStyle(color: Colors.red),
+                          ),
                       ],
                     ),
                   ))
@@ -195,49 +232,49 @@ class _LoginScreenState extends State<LoginScreen> {
         //           },
         //         ),
         //         const SizedBox(height: 20),
-        //         ElevatedButton(
-        //             onPressed: () async {
-        //               if (_formKey.currentState!.validate()) {
-        //                 final email = _emailController.text;
-        //                 final password = _passwordController.text;
+        // ElevatedButton(
+        //     onPressed: () async {
+        //       if (_formKey.currentState!.validate()) {
+        //         final email = _emailController.text;
+        //         final password = _passwordController.text;
 
-        //                 try {
-        //                   final userCredential =
-        //                       await _auth.signInWithEmailAndPassword(
-        //                     email: email,
-        //                     password: password,
-        //                   );
-        //                   if (userCredential.user != null) {
-        //                     Navigator.of(context).pushReplacement(
-        //                       MaterialPageRoute(
-        //                         builder: (context) =>
-        //                             MenuEmpresas(title: "THERAS"),
-        //                       ),
-        //                     );
-        //                   } else {
-        //                     setState(() {
-        //                       _errorMessage = 'Credenciais inválidas';
-        //                     });
-        //                   }
-        //                 } catch (e) {
-        //                   setState(() {
-        //                     _errorMessage = 'Erro durante o login';
-        //                   });
-        //                 }
-        //               }
-        //             },
-        //             child: Column(
-        //               children: [
-        //                 Container(
-        //                   padding: const EdgeInsets.symmetric(
-        //                       horizontal: 100, vertical: 20),
-        //                   child: const Text(
-        //                     "Login",
-        //                     style: TextStyle(fontSize: 20),
-        //                   ),
-        //                 ),
-        //               ],
-        //             )),
+        //         try {
+        //           final userCredential =
+        //               await _auth.signInWithEmailAndPassword(
+        //             email: email,
+        //             password: password,
+        //           );
+        //           if (userCredential.user != null) {
+        //             Navigator.of(context).pushReplacement(
+        //               MaterialPageRoute(
+        //                 builder: (context) =>
+        //                     MenuEmpresas(title: "THERAS"),
+        //               ),
+        //             );
+        //           } else {
+        //             setState(() {
+        //               _errorMessage = 'Credenciais inválidas';
+        //             });
+        //           }
+        //         } catch (e) {
+        //           setState(() {
+        //             _errorMessage = 'Erro durante o login';
+        //           });
+        //         }
+        //       }
+        //     },
+        //     child: Column(
+        //       children: [
+        //         Container(
+        //           padding: const EdgeInsets.symmetric(
+        //               horizontal: 100, vertical: 20),
+        //           child: const Text(
+        //             "Login",
+        //             style: TextStyle(fontSize: 20),
+        //           ),
+        //         ),
+        //       ],
+        //     )),
         //         Container(
         //           padding: EdgeInsets.only(top: 20),
         //           child: ElevatedButton(
