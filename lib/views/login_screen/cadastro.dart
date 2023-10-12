@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:theras_app/views/login_screen/cadastro.dart';
 import 'package:theras_app/views/menu_empresas/main.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class Cadastro extends StatefulWidget {
+  const Cadastro({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _CadastroState createState() => _CadastroState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class _CadastroState extends State<Cadastro> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String? _errorMessage;
+  Future<void> _registerUser() async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MenuEmpresas(title: "THERAS"),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Erro ao criar usuário: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     const double tamBorda = 39;
-    const double tamBotao = 20;
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -40,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Flexible(
                   flex: 1,
-                  child: Image.asset('../../../assets/UX/therasLogin.png')),
+                  child: Image.asset('../../../assets/UX/cadastro-theras.png')),
               Flexible(
                   flex: isWeb() ? 1 : 2,
                   child: Container(
@@ -52,6 +60,50 @@ class _LoginScreenState extends State<LoginScreen> {
                             key: _formKey,
                             child: Column(
                               children: [
+                                TextFormField(
+                                  style:
+                                      const TextStyle(fontSize: 25, height: 2),
+                                  decoration: const InputDecoration(
+                                    labelStyle:
+                                        TextStyle(color: Color(0xFF7063FF)),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF7063FF), width: 1),
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF7063FF), width: 2),
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                    label: Text("Nome do Usuário"),
+                                    prefixIcon: Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 10, left: 20),
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Color(0xFF7063FF),
+                                        size: 40,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, insira um e-mail válido';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 20),
                                 TextFormField(
                                   style:
                                       const TextStyle(fontSize: 25, height: 2),
@@ -78,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       padding:
                                           EdgeInsets.only(right: 10, left: 20),
                                       child: Icon(
-                                        Icons.person,
+                                        Icons.mail,
                                         color: Color(0xFF7063FF),
                                         size: 40,
                                       ),
@@ -143,7 +195,55 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                 ),
                                 const SizedBox(height: 20),
-                                Container(
+                                TextFormField(
+                                  style:
+                                      const TextStyle(fontSize: 25, height: 2),
+                                  obscureText: true,
+                                  decoration: const InputDecoration(
+                                    labelStyle:
+                                        TextStyle(color: Color(0xFF7063FF)),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF7063FF), width: 1),
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF7063FF), width: 2),
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                    labelText: 'Confirmar Senha',
+                                    prefixIcon: Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 10, left: 20),
+                                      child: Icon(
+                                        Icons.lock,
+                                        color: Color(0xFF7063FF),
+                                        size: 40,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(tamBorda),
+                                          right: Radius.circular(tamBorda)),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, confirme a senha';
+                                    } else if (value !=
+                                        _passwordController.text) {
+                                      return 'As senhas não coincidem';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                SizedBox(
                                   width: 500, // Largura desejada
                                   height: 80, // Altura desejada
                                   child: ElevatedButton(
@@ -160,95 +260,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                         const Color(0xFF7063FF),
                                       ),
                                     ),
-                                    onPressed: () async {
+                                    onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        final email = _emailController.text;
-                                        final password =
-                                            _passwordController.text;
-
-                                        try {
-                                          final userCredential = await _auth
-                                              .signInWithEmailAndPassword(
-                                            email: email,
-                                            password: password,
-                                          );
-                                          if (userCredential.user != null) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const MenuEmpresas(
-                                                        title: "THERAS"),
-                                              ),
-                                            );
-                                          } else {
-                                            setState(() {
-                                              _errorMessage =
-                                                  'Credenciais inválidas';
-                                            });
-                                          }
-                                        } catch (e) {
-                                          setState(() {
-                                            _errorMessage =
-                                                'Erro durante o login';
-                                          });
-                                        }
+                                        _registerUser();
                                       }
                                     },
-                                    child: const Text(
-                                      "Login",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
+                                    child: Text('Cadastrar'),
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-                                if (_errorMessage != null)
-                                  const Text(
-                                    "Usuário ou Senha estão Incorretos",
-                                    style: TextStyle(color: Colors.red),
-                                  ),
                               ],
                             )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Ainda não tem uma conta?",
-                              style: TextStyle(
-                                fontSize: 22,
-                              ),
-                            ),
-                            InkWell(
-                                child: const Text(' Criar',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xFF7063FF),
-                                      fontSize: 22,
-                                    )),
-                                onTap: () => Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Cadastro()))),
-                          ],
-                        ),
                         const SizedBox(height: 20),
-                        InkWell(
-                            child: const Text('Esqueci minha senha',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF7063FF),
-                                  fontSize: 22,
-                                )),
-                            onTap: () => Navigator),
-                        const SizedBox(height: 20),
-                        const Row(children: [
-                          Expanded(child: Divider()),
-                          Text("Ou",
-                              style: TextStyle(
-                                fontSize: 22,
-                              )),
-                          Expanded(child: Divider()),
-                        ]),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -335,8 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     break;
                                   case LoginStatus.failed:
                                     // Lidar com erros de autenticação do Facebook
-                                    print(
-                                        'Erro ao fazer login com o Facebook');
+                                    print('Erro ao fazer login com o Facebook');
                                     break;
                                   case LoginStatus.operationInProgress:
                                     // Lida com o caso de operação em andamento (se necessário).
