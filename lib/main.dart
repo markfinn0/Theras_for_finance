@@ -8,7 +8,11 @@ import 'views/menu_empresas/main.dart';
 import 'views/details_screen/main.dart';
 import 'dart:html';
 import 'dart:ui' as ui;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -33,6 +37,8 @@ void inicializarFirebase() async {
 //   runApp(const MyApp());
 // }
 void main() async {
+  await dotenv.load(fileName: ".env");
+  String facebookAppId = dotenv.env['41692962765-28jgbngm3rpmfv32nsl3j1ku1bckg7q6.apps.googleusercontent.com'] ?? '';
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(
     'adViewType',
