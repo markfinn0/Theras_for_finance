@@ -21,6 +21,26 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorMessage;
 
   @override
+  void initState() {
+    super.initState();
+    // Set Firebase Authentication persistence mode to LOCAL
+    _auth.setPersistence(Persistence.LOCAL);
+    checkCurrentUser();
+  }
+
+  void checkCurrentUser() async {
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      // User is already authenticated, navigate to the main screen.
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const MenuEmpresas(title: "THERAS"),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isWeb() {
       return MediaQuery.of(context).size.width > 900 ||
