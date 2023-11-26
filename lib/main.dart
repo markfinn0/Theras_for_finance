@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
       title: 'Theras for Finance',
       home: FutureBuilder(
         builder: (context, snapshot) {
-          return HomeScreen();
+          return const HomeScreen(title: 'T H Ξ R A S');
           // return const MenuEmpresas(title: 'T H Ξ R A S');
         },
         future: null,
