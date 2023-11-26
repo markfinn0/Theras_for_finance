@@ -24,177 +24,181 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget _buildColumn(BuildContext context) => Container(
     height: 2160,
     child: Column(
-      children: [ Stack(children:[
+      children: [
+        // Stack(children: [
         _buildTopContainer(context),
-        ]),
+        // ]),
         _buildBottomContainer(),
         _buildTopAbout(context),
-        const Footer()
+        // const Footer()
       ],
     ));
 
 Widget _buildTopContainer(context) => Flexible(
-      flex: 1,
-      child: Stack( children:[ Container(
-        decoration: BoxDecoration(
-          //gradient: LinearGradient(colors: [Color(0xFFC86DD7), Color(0xFF3023AE)]),
-          color: Color.fromRGBO(113, 99, 255, 1),
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(200),
-            //bottomLeft: Radius.circular(150)
+    flex: 1,
+    child: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            //gradient: LinearGradient(colors: [Color(0xFFC86DD7), Color(0xFF3023AE)]),
+            color: Color.fromRGBO(113, 99, 255, 1),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(200),
+              //bottomLeft: Radius.circular(150)
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Transform.scale(
-                      scale: 0.5,
-                      child: Image.asset(
-                        "assets/company_imagens/iconeTheras.png",
-                        width: 100,
-                        height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Transform.scale(
+                        scale: 0.5,
+                        child: Image.asset(
+                          "assets/company_imagens/iconeTheras.png",
+                          width: 100,
+                          height: 100,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'T H Ξ R A S',
+                        style: TextStyle(fontSize: 26, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 120,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Center(
+                                  child: Text("Login",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          letterSpacing: 1,
+                                          fontFamily: "Montserrat-Bold"))),
+                            ),
+                          ))
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Análises De Empresas com \n Machine Learning',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 45,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      'T H Ξ R A S',
-                      style: TextStyle(fontSize: 26, color: Colors.white),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 120,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Center(
-                                child: Text("Login",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        letterSpacing: 1,
-                                        fontFamily: "Montserrat-Bold"))),
-                          ),
-                        ))
-                  ],
-                )
-              ],
-            ),
-            Row(
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ]),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
+                children: [
                   Text(
-                    'Análises De Empresas com \n Machine Learning',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 45,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                    '''Desenvolvemos análises de empresas na bolsa brasileira com modelos de\naprendizado de máquina, com Regressão Polimonial, K-means e Redes Neurais.''',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      height: 1.7,
-                      color: Colors.grey[300],
-                    ))
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MenuEmpresas(title: 'T H Ξ R A S'),
+                      '''Desenvolvemos análises de empresas na bolsa brasileira com modelos de\naprendizado de máquina, com Regressão Polimonial, K-means e Redes Neurais.''',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.7,
+                        color: Colors.grey[300],
+                      ))
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              MenuEmpresas(title: 'T H Ξ R A S'),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 250,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [(Color(0xff374ABE)), (Color(0xff64B6FF))]),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    );
-                  },
-                  child: Container(
-                    width: 250,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [(Color(0xff374ABE)), (Color(0xff64B6FF))]),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Acessar cards gratuitos",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          letterSpacing: 1,
-                          fontFamily: "Montserrat-Bold",
+                      child: Center(
+                        child: Text(
+                          "Acessar cards gratuitos",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            letterSpacing: 1,
+                            fontFamily: "Montserrat-Bold",
+                          ),
                         ),
                       ),
                     ),
+                  )
+                ],
+              ),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  //gradient: LinearGradient(colors: [Color(0xFFC86DD7), Color(0xFF3023AE)]),
+                  color: Color.fromRGBO(113, 99, 255, 1),
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(300),
+                    //bottomLeft: Radius.circular(150)
                   ),
-                )
-              ],
-            )
-            ,Container(
-              height: 200,
-              decoration: BoxDecoration(
-          //gradient: LinearGradient(colors: [Color(0xFFC86DD7), Color(0xFF3023AE)]),
-          color: Color.fromRGBO(113, 99, 255, 1),
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(300),
-            //bottomLeft: Radius.circular(150)
+                ),
+              )
+            ],
           ),
         ),
-            )
-          
-          ],
-        ),
-      ),Center(
+        Center(
           child: Container(
-              padding: EdgeInsets.only(top: 350,bottom: 50),
-              width: MediaQuery.of(context).size.width /1.25,
+              padding: EdgeInsets.only(top: 350, bottom: 50),
+              width: MediaQuery.of(context).size.width / 1.25,
               height: MediaQuery.of(context).size.height / 1.25,
               child: Center(
                   child: Image.asset(
                 "assets/company_imagens/dashboardTHERAS.jpeg",
                 scale: 1,
               ))),
-        ),],)
-    );
+        ),
+      ],
+    ));
 
 final List<String> imageFileNames = [
   "assets/company_imagens/azul.png",
@@ -324,7 +328,6 @@ Widget _buildTopAbout(BuildContext context) => Flexible(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-
               ],
             ),
             Row(
@@ -359,8 +362,9 @@ Widget _buildTopAbout(BuildContext context) => Flexible(
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          js.context.callMethod('open',
-                              ['https://www.youtube.com/channel/UCaJECNjm4dEJHHBAdHCFjzg']);
+                          js.context.callMethod('open', [
+                            'https://www.youtube.com/channel/UCaJECNjm4dEJHHBAdHCFjzg'
+                          ]);
                         },
                         child: Text('Acessar vídeos'),
                         style: ElevatedButton.styleFrom(
