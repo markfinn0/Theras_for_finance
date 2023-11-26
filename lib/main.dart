@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:theras_app/views/home_screen/main.dart';
 import 'package:theras_app/views/login_screen/main.dart';
 import 'views/menu_empresas/main.dart';
 import 'views/details_screen/main.dart';
@@ -38,7 +39,9 @@ void inicializarFirebase() async {
 // }
 void main() async {
   await dotenv.load(fileName: ".env");
-  String facebookAppId = dotenv.env['41692962765-28jgbngm3rpmfv32nsl3j1ku1bckg7q6.apps.googleusercontent.com'] ?? '';
+  String facebookAppId = dotenv.env[
+          '41692962765-28jgbngm3rpmfv32nsl3j1ku1bckg7q6.apps.googleusercontent.com'] ??
+      '';
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(
     'adViewType',
@@ -74,10 +77,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Theras for Finance',
-      home: FutureBuilder(builder: (context, snapshot) {
-        return const LoginScreen();
-        // return const MenuEmpresas(title: 'T H Ξ R A S');
-      }, future: null,),
+      home: FutureBuilder(
+        builder: (context, snapshot) {
+          return const HomeScreen(title: 'T H Ξ R A S');
+          // return const MenuEmpresas(title: 'T H Ξ R A S');
+        },
+        future: null,
+      ),
     );
   }
 }

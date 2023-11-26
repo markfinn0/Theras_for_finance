@@ -19,10 +19,19 @@ class _CadastroState extends State<Cadastro> {
   Future<void> _registerUser() async {
     try {
       if (_formKey.currentState!.validate()) {
+        final userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => MenuEmpresas(title: "THERAS"),
           ),
+        );
+        MaterialPageRoute(
+          builder: (context) => MenuEmpresas(title: "THERAS"),
         );
       }
     } catch (e) {
